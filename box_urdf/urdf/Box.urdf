@@ -1,0 +1,125 @@
+
+<robot name="test_model">
+
+  <!-- root link, on the ground just below the model origin -->
+  <link name="base_footprint">
+   <visual>
+   <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    </visual>
+  </link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="4.5 7.0 0.3" rpy="0 0 -45" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+  <!-- the model -->
+  <link name="base_link">
+    <inertial>
+    
+      <mass value="50" />
+      <origin xyz="0.0 0.0 0.0" />
+      <inertia ixx="17.034" ixy="0.0" ixz="0.0"
+        iyy="17.034" iyz="0.0"
+        izz="33.33" />
+    
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="2.0 10.0 0.1" /> <!-- does not need to match collision -->
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.25" />
+      </geometry>
+    </collision>
+  </link>
+
+
+
+   
+  <gazebo>
+    <!--plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+     <!commandTopic>/Box/cmd_vel</commandTopic>
+     <alwaysOn>true</alwaysOn>
+      <updateRate>10.0</updateRate>
+     <bodyName>base_link</bodyName>
+     <topicName>/Box/odom</topicName>
+     <gaussianNoise>0.01</gaussianNoise>
+     <frameName>world</frameName>
+     <xyzOffsets>0 0 0</xyzOffsets>
+     <rpyOffsets>0 0 0</rpyOffsets>
+</plugin-->
+<plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>/Box/cmd_vel</commandTopic>
+     
+      <odometryTopic>odom</odometryTopic>
+      <topicName>odom</topicName>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>5.0</odometryRate>
+     
+      
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <!--ODOM MI DA LE INFORMAZIONI RIFERITE AD UN FRAME FISSATO NEL PUNTO DI PARTENZA DEL ROBOT. sE IL ROBOT PARTE IL 5,3 IL FRAME ODOM È
+        DEFINITO IN 5,3.
+      È NECESSARIO FARE UNA TRASFORMAZIONE TRA QUEL FRAME E IL FRAME DEL MONDO. PRENDENDO LE COORDINATE CHE ARRIVANO DA ODOM, FARLE PASSARE IN TF E OTTENERE UNA POSIZIONE RIFERITA AL WORLD FRAME.-->
+    </plugin>
+</gazebo>
+</robot>
+
+
+<robot name="test_model2">
+
+  <!-- root link, on the ground just below the model origin -->
+  <link name="base_footprint">
+   <visual>
+   <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+    </visual>
+  </link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="8.74 2.7573 0.3" rpy="0 0 -45" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+  <!-- the model -->
+  <link name="base_link">
+    <inertial>
+    
+      <mass value="50" />
+      <origin xyz="0.0 0.0 0.0" />
+      <inertia ixx="17.034" ixy="0.0" ixz="0.0"
+        iyy="17.034" iyz="0.0"
+        izz="33.33" />
+    
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="2.0 10.0 0.1" /> <!-- does not need to match collision -->
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.25" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
+   
+
