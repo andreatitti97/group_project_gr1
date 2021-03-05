@@ -22,6 +22,5 @@ $ roslaunch box_urdf spawn_camera_box_model.launch
 $ roslaunch box_urdf spawn_model.launch
 $ rosrun group_project drone_control
 $ rosrun group_project RGB_visual_ros_sim.py 
-```
 
 
