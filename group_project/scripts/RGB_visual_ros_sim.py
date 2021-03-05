@@ -56,10 +56,11 @@ index_th4 = 0
 #Txt Files for debugging
 
 # Print current working directory
-print "Current working dir : %s" % os.getcwd()
+# print "Current working dir : %s" % os.getcwd()
+# print "Directory: %s" % os.path.dirname(__file__)
 
-file1 = open("simulation_data/sim_data_complete/frame_received_and_analyzed_RGB.txt","w") 
-file2 = open("simulation_data/sim_data_complete/time_to_analyze_frame_RGB.txt","w") 
+file1 = open('%s/simulation_data/sim_data_complete/frame_received_and_analyzed_RGB.txt' % os.path.dirname(__file__),"w") 
+file2 = open('%s/simulation_data/sim_data_complete/time_to_analyze_frame_RGB.txt' % os.path.dirname(__file__),"w") 
 
 """
 In questo codice viene effettuata una conversione da RGB ad HSV per detectare la struttura
