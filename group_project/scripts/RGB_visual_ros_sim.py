@@ -54,6 +54,10 @@ index_th3 = 0
 index_th4 = 0
 
 #Txt Files for debugging
+
+# Print current working directory
+print "Current working dir : %s" % os.getcwd()
+
 file1 = open("simulation_data/sim_data_complete/frame_received_and_analyzed_RGB.txt","w") 
 file2 = open("simulation_data/sim_data_complete/time_to_analyze_frame_RGB.txt","w") 
 
