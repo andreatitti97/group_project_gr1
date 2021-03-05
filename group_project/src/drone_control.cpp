@@ -1154,8 +1154,8 @@ Nel caso fosse necessario contattemi che vi spiego meglio.
         bottom_camera_pose.model_name = (std::string) "camera_box";
         bottom_camera_pose.reference_frame = (std::string) "world";
         bottom_camera_pose.pose.position.x = drone.drone_x;
-        bottom_camera_pose.pose.position.y = drone.drone_y;
-        bottom_camera_pose.pose.position.z = drone.drone_z- 0.15;
+        bottom_camera_pose.pose.position.y = drone.drone_y- 0.1;
+        bottom_camera_pose.pose.position.z = drone.drone_z- 0.1;
         
         //Conversion of eulerian angle to quaternion for model state 
         tf::Matrix3x3 obs_mat;
@@ -1188,8 +1188,8 @@ Nel caso fosse necessario contattemi che vi spiego meglio.
         bottom_camera_pose_RGB.model_name = (std::string) "camera_box_RGB";
         bottom_camera_pose_RGB.reference_frame = (std::string) "world";
         bottom_camera_pose_RGB.pose.position.x = drone.drone_x;
-        bottom_camera_pose_RGB.pose.position.y = drone.drone_y;
-        bottom_camera_pose_RGB.pose.position.z = drone.drone_z+ 0.25;
+        bottom_camera_pose_RGB.pose.position.y = drone.drone_y+ 0.1;
+        bottom_camera_pose_RGB.pose.position.z = drone.drone_z- 0.1;
         
         //Conversion of eulerian angle to quaternion for model state 
         

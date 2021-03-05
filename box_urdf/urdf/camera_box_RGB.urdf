@@ -13,7 +13,7 @@
         <parent link="object_base_link"/>
         <child link="object_link"/>
         <axis xyz="0 0 1" />
-        <origin xyz="0 0 0" rpy="0 -1.51 0"/>
+        <origin xyz="0 0 0" rpy="0 1.05 0"/>
     </joint>
  
    <link name="object_link">
