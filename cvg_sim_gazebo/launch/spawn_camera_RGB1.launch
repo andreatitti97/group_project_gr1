@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+ <launch>
+   <arg name="model_camera" default="$(find cvg_sim_gazebo)/urdf/RGB_Camera.urdf.xacro"/>
+   <!-- -->
+   <param name="robot_description_RGB" command="$(find xacro)/xacro '$(arg model_camera)' --inorder"/> 
+   
+   <!-- push robot_description to factory and spawn robot in gazebo -->
+   <node name="spawn_camera_RGB" pkg="gazebo_ros" type="spawn_model"
+   args="-urdf -param robot_description_RGB -model camera_box_RGB" respawn="false" output="screen"/>
+  
+   <!-- send the robot XML to param server -->
+   
+   
+   <!-- node name="hector_pose_estimation" pkg="hector_pose_estimation" type="hector_pose_estimation_node" output="screen"/-->
+
+ </launch>
+   

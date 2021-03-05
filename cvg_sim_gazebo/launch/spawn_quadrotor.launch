@@ -9,6 +9,7 @@
    <arg name="R" default="0"/>
    <arg name="P" default="0"/>
    <arg name="Y" default="0"/>
+   
    <!-- send the robot XML to param server -->
    <param name="robot_description" command="$(find xacro)/xacro '$(arg model)' --inorder" />
    

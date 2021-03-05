@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
    
-    <param name="robot_description"  command="cat '$(find box_urdf)/urdf/camera_box.urdf'"/>
-    <node name="spawn_robot_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model camera_box"/>
+    <param name="bottom_camera"  command="cat '$(find box_urdf)/urdf/camera_box.urdf'"/>
+    <node name="spawn_camera" pkg="gazebo_ros" type="spawn_model" args="-urdf -param bottom_camera -model camera_box"/>
 
-    <param name="robot_description_RGB"  command="cat '$(find box_urdf)/urdf/camera_box_RGB.urdf'"/>
-    <node name="spawn_robot_urdf_RGB" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description_RGB -model camera_box_RGB"/>
+    <param name="RGB_camera"  command="cat '$(find box_urdf)/urdf/camera_box_RGB.urdf'"/>
+    <node name="spawn_RGB_camera" pkg="gazebo_ros" type="spawn_model" args="-urdf -param RGB_camera -model camera_box_RGB"/>
 
  
 </launch>
