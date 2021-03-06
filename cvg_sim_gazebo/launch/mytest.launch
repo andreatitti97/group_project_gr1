@@ -29,4 +29,7 @@
   <node name="spawn_robot_urdf_RGB" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description_RGB -model camera_box_RGB"/> 
 -->
  <include file="$(find box_urdf)/launch/spawn_camera_box_model.launch" pass_all_args="true"/>
+<!-- Drone navigation -->
+ <include file="$(find group_project)/launch/drone_nav.launch" pass_all_args="true" />
+
 </launch>
