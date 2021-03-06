@@ -23,4 +23,12 @@ $ roslaunch box_urdf spawn_model.launch
 $ rosrun group_project drone_control
 $ rosrun group_project RGB_visual_ros_sim.py 
 
-
+## TO DO LIST
+- Creare un URDF per il modello dei pannelli (bianchi) e un corrispondente lanch file, verificando che funzioni con la simulazione
+  per ora ho inserito manualmente un pannello su Gazebo per testare l'algoritmo.
+- Testare l'algoritmo di navigazione in scenari diversi, per ora è stato testato su un pannelo bianco di grandi dimensioni, il drone si       solleva, lo rileva e viaggia sul pannello fino al capo opposto per poi girarsi e tornare al capo di partenza ( da cui in poi va dritto seguendo sempre la GPS line). 
+- Utilizzare joint rotazionali per le camere (gimbal) 
+- Creare un URDF con un environment "finale" in cui far lavorare il robot (dopo i test sulla navigazione)
+- Test finale della navigazione sul environment finale
+- 
+-  
