@@ -1,25 +1,29 @@
+<?xml version='1.0'?>
 <robot name="test_model">
   
 <link name="my_link">
    <inertial>
      <origin xyz="0 0 0" rpy="0 0 0"/>
-     <mass value="1"/>
+     <mass value="5"/>
      <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
    </inertial>
 
    <visual name="Box1">
+     <collision>
      <origin xyz="5 0 0" rpy="0.05 0 0.7853" />
      <geometry>
-       <box size="10 2 0.1" />
+       <box size="20 10 0.5" />
      </geometry>
-     <material name="Cyan">
-       <color rgba="0 1.0 1.0 1.0"/>
+     </collision>
+     <material name="White">
+       <color rgba="1.0 1.0 1.0 1.0"/>
      </material>
    </visual>
-    
+
+   <!-- 
    <visual name="Box2">
      <origin xyz="6.06066 -4.59619 0" rpy="0.05 0 0.7853" />
-     <!-- centers nella configurazione 0 x=7.82843, y=-2.82843-->
+     <! centers nella configurazione 0 x=7.82843, y=-2.82843 
      <geometry>
        <box size="5 2 0.1" />
      </geometry>
@@ -30,10 +34,10 @@
    
    <visual name="Box3">
      <origin xyz="8.88913 -7.42461 0" rpy="0.05 0 0.7853" />
-      <!-- centers nella configurazione 0 x=10.6569, y=--5.65685--> 
+      centers nella configurazione 0 x=10.6569, y=5.65685  
      <geometry>
        <box size="5 2 0.1" />
-     <!-- length confg 0  10, 2--> 
+     <!- length confg 0  10, 2
      </geometry>
      <material name="Cyan">
        <color rgba="0 1.0 1.0 1.0"/>
@@ -55,7 +59,8 @@
      <geometry>
        <cylinder radius="1" length="0.5"/>
      </geometry>
-   </collision>
+   </collision> -->
+
  </link>
 </robot>
 
