@@ -34,7 +34,7 @@ $ rosrun group_project RGB_visual_ros_sim.py
   ```
 	roslaunch cvg_sim_gazebo mytest.launch wname:=(Cartella in cui è contenuto)/(nome del mondo).world
   ```
- Con "(Cartella in cui è contenuto)" che può essere o "/wolds" (dove è contenuto il mondo appena sviluppato) o "/worlds_beckup" (dove è contenuto empty.world)
+ Con "(Cartella in cui è contenuto)" che può essere o "/wolds" (dove è contenuto il mondo appena sviluppato) o "/worlds_backup" (dove è contenuto empty.world)
 - Testare l'algoritmo di navigazione in scenari diversi, per ora è stato testato su un pannelo bianco di grandi dimensioni, il drone si       solleva, lo rileva e viaggia sul pannello fino al capo opposto per poi girarsi e tornare al capo di partenza ( da cui in poi va dritto seguendo sempre la GPS line). 
 - Utilizzare joint rotazionali per le camere (gimbal) 
 - Creare un URDF con un environment "finale" in cui far lavorare il robot (dopo i test sulla navigazione)
