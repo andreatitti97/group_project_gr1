@@ -766,7 +766,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
 //Permette a tutte le osservaziinidel filtri di essere inizializzate correttamente 
 //finche non diventa false il flag il drone è guidato via Waypoint lungo la vela 
 
-  if (mission.navigation_iteration_count > 100)
+  if (mission.navigation_iteration_count > 20)
   {
        mission.structure_array_initialization = false;
       // from_image = false;

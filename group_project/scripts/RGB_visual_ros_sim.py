@@ -896,5 +896,8 @@ def listener():
    
       
 if __name__ == '__main__':
-    listener()
-    file1.close()
+    try:        
+        listener()
+        file1.close()
+    except rospy.ROSInterruptException:
+        pass
