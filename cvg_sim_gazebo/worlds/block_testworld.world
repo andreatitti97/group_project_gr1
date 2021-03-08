@@ -13,52 +13,29 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
-    <model name='plane1_model'>
-      <link name='body'>
-        <collision name='geom_1'>
+    <!-- Ground Plane -->
+    <model name="plane1_model" static="true">
+      <link name="body">
+        <collision name="geom_1">
           <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>1 1</size>
-            </plane>
+            <plane normal="0 0 1"/>
           </geometry>
           <surface>
             <friction>
-              <ode/>
-              <torsional>
-                <ode/>
-              </torsional>
+              <ode mu="10.0" mu2="10.0" fdir1="0 0 0" slip1="0" slip2="0"/>
             </friction>
-            <bounce/>
+            <bounce restitution_coefficient="0" threshold="1000000.0"/>
             <contact>
-              <ode/>
+              <ode soft_cfm="0" soft_erp="0.2" kp="1e10" kd="1" max_vel="100.0" min_depth="0.0001"/>
             </contact>
           </surface>
-          <max_contacts>10</max_contacts>
         </collision>
-        <visual name='visual_1'>
+        <visual name="visual_1" cast_shadows="false">
           <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>1 1</size>
-            </plane>
+            <plane normal="0 0 1"/>
           </geometry>
-          <material/>
+          <material script="Gazebo/Grey"/>
         </visual>
-        <self_collide>0</self_collide>
-        <inertial>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-          <mass>1</mass>
-        </inertial>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
     </model>
     <gravity>0 0 -9.8</gravity>
@@ -98,7 +75,7 @@
         <collision name='collision'>
           <geometry>
             <box>
-              <size>0.999998 1 1</size>
+              <size>0.999998 1 0.999999</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -118,14 +95,14 @@
         <visual name='visual'>
           <geometry>
             <box>
-              <size>0.999998 1 1</size>
+              <size>0.999998 1 0.999999</size>
             </box>
           </geometry>
-          <material/>
+          
+          <material script="Gazebo/White"/>
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
     </model>
     <model name='unit_box_clone'>
@@ -168,11 +145,10 @@
               <size>4.00094 1 0.118269</size>
             </box>
           </geometry>
-          <material/>
+          <material script="Gazebo/White"/>
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
     </model>
     <model name='unit_box_clone_0'>
@@ -215,11 +191,10 @@
               <size>4.00094 1 0.118269</size>
             </box>
           </geometry>
-          <material/>
+          <material script="Gazebo/White"/>
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
     </model>
     <model name='unit_box_clone_1'>
@@ -262,11 +237,10 @@
               <size>4.00094 1 0.118269</size>
             </box>
           </geometry>
-          <material/>
+          <material script="Gazebo/White"/>
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
     </model>
     <model name='unit_box_clone_2'>
@@ -309,106 +283,75 @@
               <size>4.00094 1 0.118269</size>
             </box>
           </geometry>
-          <material/>
+          <material script="Gazebo/White"/>
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
-        <gravity>1</gravity>
       </link>
     </model>
     <state world_name='default'>
-      <sim_time>352 66000000</sim_time>
-      <real_time>123 808480714</real_time>
-      <wall_time>1615218066 566209442</wall_time>
-      <iterations>121400</iterations>
-      <model name='camera_box'>
-        <pose frame=''>9.79985 2.44859 4.93297 0 0 -0.001462</pose>
+      <sim_time>230 666000000</sim_time>
+      <real_time>235 253389800</real_time>
+      <wall_time>1615108711 740973600</wall_time>
+      <iterations>230666</iterations>
+      <model name='ground_plane'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
-        <link name='object_base_link'>
-          <pose frame=''>9.79985 2.44859 4.93297 0 0 -0.001462</pose>
-          <velocity>0 0 -0.4312 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -19.6 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='camera_box_RGB'>
-        <pose frame=''>9.79985 2.64859 4.9334 0 0 -0.001462</pose>
-        <scale>1 1 1</scale>
-        <link name='object_base_link'>
-          <pose frame=''>9.79985 2.64859 4.9334 0 0 -0.001462</pose>
-          <velocity>0 0 -0.4214 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -19.6 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='plane1_model'>
-        <pose frame=''>0 0 -72216.6 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='body'>
-          <pose frame=''>0 0 -72216.6 0 -0 0</pose>
-          <velocity>0 0 -1189.72 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -9.8 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='quadrotor'>
-        <pose frame=''>9.80892 2.54919 5.0452 -0.002684 0.000448 -0.000602</pose>
-        <scale>1 1 1</scale>
-        <link name='base_link'>
-          <pose frame=''>9.80892 2.54919 5.0452 -0.002684 0.000448 -0.000602</pose>
-          <velocity>0.0749 0.005449 0.027182 -0.04766 -0.050592 0.043892</velocity>
-          <acceleration>0.004704 0.024795 -0.395547 0.191252 0.182134 -0.002341</acceleration>
-          <wrench>0.006953 0.036647 -0.584618 0 -0 0</wrench>
+        <link name='link'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box'>
-        <pose frame=''>3.37586 0.005222 0.05913 -0 2e-06 -0.746857</pose>
+        <pose frame=''>3.37584 0.005269 0.059135 0 0 -0.000646</pose>
         <scale>4.00095 1 0.118269</scale>
         <link name='link'>
-          <pose frame=''>3.37586 0.005222 0.05913 -0 2e-06 -0.746857</pose>
+          <pose frame=''>3.37584 0.005269 0.059135 0 0 -0.000646</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -9.8 0 -0 0</wrench>
+          <acceleration>0.006207 1.58788 7.79748 2.85511 0.049773 0.041155</acceleration>
+          <wrench>0.006207 1.58788 7.79748 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone'>
-        <pose frame=''>6.4491 -2.88047 0.059116 -0 -9e-06 -0.741124</pose>
+        <pose frame=''>7.7862 0.030756 0.059135 0 0 -0.000661</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>6.4491 -2.88047 0.059116 -0 -9e-06 -0.741124</pose>
+          <pose frame=''>7.7862 0.030756 0.059135 0 0 -0.000661</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-0.606876 0.549574 -8.60459 -0.109321 0.905916 -3.1392</acceleration>
-          <wrench>-0.606876 0.549574 -8.60459 0 -0 0</wrench>
+          <acceleration>-0.003455 1.58796 7.79754 2.85531 -0.003998 -0.041073</acceleration>
+          <wrench>-0.003455 1.58796 7.79754 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone_0'>
-        <pose frame=''>9.50476 -5.83182 0.05913 0 2e-06 -0.770217</pose>
+        <pose frame=''>12.0736 0.060943 0.05913 -1e-05 -0 -0.000658</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>9.50476 -5.83182 0.05913 0 2e-06 -0.770217</pose>
+          <pose frame=''>12.0736 0.060943 0.05913 -1e-05 -0 -0.000658</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone_1'>
-        <pose frame=''>12.3951 -8.94444 0.05913 0 -2e-06 -0.785348</pose>
+        <pose frame=''>16.313 0.006178 0.05913 -1e-05 -0 -0.00064</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>12.3951 -8.94444 0.05913 0 -2e-06 -0.785348</pose>
+          <pose frame=''>16.313 0.006178 0.05913 -1e-05 -0 -0.00064</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 -9.8 0 -0 0</acceleration>
           <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='unit_box_clone_2'>
-        <pose frame=''>15.3229 -11.9547 0.059116 0 9e-06 -0.814859</pose>
+        <pose frame=''>20.5982 -0.090505 0.05913 -1e-05 -0 -0.000652</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>15.3229 -11.9547 0.059116 0 9e-06 -0.814859</pose>
+          <pose frame=''>20.5982 -0.090505 0.05913 -1e-05 -0 -0.000652</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0.544669 -0.610578 -8.60474 0.844654 -0.173105 3.13148</acceleration>
-          <wrench>0.544669 -0.610578 -8.60474 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <light name='sun'>
@@ -422,375 +365,5 @@
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <model name='camera_box'>
-      <link name='object_base_link'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>2</mass>
-          <inertia>
-            <ixx>101</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>200</iyy>
-            <iyz>0</iyz>
-            <izz>101</izz>
-          </inertia>
-        </inertial>
-        <visual name='object_base_link_fixed_joint_lump__object_link_visual'>
-          <pose frame=''>0 0 0 0 1.05 0</pose>
-          <geometry>
-            <box>
-              <size>0.01 0.01 0.01</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Blue</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <velocity_decay/>
-        <gravity>1</gravity>
-        <velocity_decay/>
-        <gravity>1</gravity>
-        <velocity_decay/>
-        <self_collide>0</self_collide>
-        <sensor name='bottom_camera' type='camera'>
-          <update_rate>30</update_rate>
-          <camera name='head'>
-            <horizontal_fov>1.39626</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>360</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.02</near>
-              <far>300</far>
-            </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0</mean>
-              <stddev>0.007</stddev>
-            </noise>
-          </camera>
-          <plugin name='camera_controller' filename='libgazebo_ros_camera.so'>
-            <alwaysOn>true</alwaysOn>
-            <updateRate>0.0</updateRate>
-            <cameraName>/gimbal_bottom_camera</cameraName>
-            <imageTopicName>image_raw</imageTopicName>
-            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-            <frameName>camera_link</frameName>
-            <hackBaseline>0.07</hackBaseline>
-            <distortionK1>0.0</distortionK1>
-            <distortionK2>0.0</distortionK2>
-            <distortionK3>0.0</distortionK3>
-            <distortionT1>0.0</distortionT1>
-            <distortionT2>0.0</distortionT2>
-            <robotNamespace>/</robotNamespace>
-          </plugin>
-          <pose frame=''>0 0 0 0 1.05 0</pose>
-        </sensor>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>0 0 0 0 -0 0</pose>
-    </model>
-    <model name='quadrotor'>
-      <link name='base_link'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose frame=''>-0.000101 0 0 0 -0 0</pose>
-          <mass>1.478</mass>
-          <inertia>
-            <ixx>0.01152</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.0115425</iyy>
-            <iyz>0</iyz>
-            <izz>0.0218225</izz>
-          </inertia>
-        </inertial>
-        <collision name='base_link_collision'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/andrea/catkin_ws/src/group_project_gr1/cvg_sim_gazebo/meshes/quadrotor/quadrotor_4.stl</uri>
-            </mesh>
-          </geometry>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <friction>
-              <ode/>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <collision name='base_link_fixed_joint_lump__sonar_link_collision_1'>
-          <pose frame=''>-0.15 0 0 3.14159 1.57079 3.14159</pose>
-          <geometry>
-            <box>
-              <size>0.01 0.01 0.01</size>
-            </box>
-          </geometry>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <friction>
-              <ode/>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='base_link_visual'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/andrea/catkin_ws/src/group_project_gr1/cvg_sim_gazebo/meshes/quadrotor/quadrotor_4.dae</uri>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>__default__</uri>
-              <name>__default__</name>
-            </script>
-          </material>
-        </visual>
-        <visual name='base_link_fixed_joint_lump__sonar_link_visual_1'>
-          <pose frame=''>-0.15 0 0 3.14159 1.57079 3.14159</pose>
-          <geometry>
-            <mesh>
-              <scale>1 1 1</scale>
-              <uri>/home/andrea/catkin_ws/src/group_project_gr1/cvg_sim_gazebo/meshes/sonar_sensor/max_sonar_ez4.dae</uri>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>__default__</uri>
-              <name>__default__</name>
-            </script>
-          </material>
-        </visual>
-        <velocity_decay/>
-        <gravity>1</gravity>
-        <velocity_decay/>
-        <self_collide>0</self_collide>
-        <sensor name='sonar' type='ray'>
-          <update_rate>10</update_rate>
-          <ray>
-            <range>
-              <min>0.01</min>
-              <max>3</max>
-              <resolution>0.01</resolution>
-            </range>
-            <scan>
-              <horizontal>
-                <samples>3</samples>
-                <min_angle>-0.349066</min_angle>
-                <max_angle>0.349066</max_angle>
-                <resolution>1</resolution>
-              </horizontal>
-              <vertical>
-                <samples>3</samples>
-                <min_angle>-0.349066</min_angle>
-                <max_angle>0.349066</max_angle>
-              </vertical>
-            </scan>
-          </ray>
-          <plugin name='gazebo_ros_sonar_controller' filename='libhector_gazebo_ros_sonar.so'>
-            <gaussianNoise>0.000</gaussianNoise>
-            <topicName>sonar_height</topicName>
-            <frameId>sonar_link</frameId>
-            <robotNamespace>/</robotNamespace>
-          </plugin>
-          <pose frame=''>-0.15 0 0 3.14159 1.57079 3.14159</pose>
-        </sensor>
-        <kinematic>0</kinematic>
-      </link>
-      <plugin name='quadrotor_imu_sim' filename='libhector_gazebo_ros_imu.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>100.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <frameId>ardrone_base_link</frameId>
-        <topicName>/ardrone/imu</topicName>
-        <rpyOffsets>0 0 0</rpyOffsets>
-        <gaussianNoise>0</gaussianNoise>
-        <accelDrift>0.5 0.5 0.5</accelDrift>
-        <accelGaussianNoise>0.35 0.35 0.3</accelGaussianNoise>
-        <rateDrift>0.0 0.0 0.0</rateDrift>
-        <rateGaussianNoise>0.00 0.00 0.00</rateGaussianNoise>
-        <headingDrift>0.0</headingDrift>
-        <headingGaussianNoise>0.00</headingGaussianNoise>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <plugin name='quadrotor_baro_sim' filename='libhector_gazebo_ros_baro.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>10.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <topicName>pressure_height</topicName>
-        <altimeterTopicName>altimeter</altimeterTopicName>
-        <offset>0</offset>
-        <drift>0.1</drift>
-        <gaussianNoise>0.5</gaussianNoise>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <plugin name='quadrotor_magnetic_sim' filename='libhector_gazebo_ros_magnetic.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>10.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <topicName>magnetic</topicName>
-        <offset>0 0 0</offset>
-        <drift>0.0 0.0 0.0</drift>
-        <gaussianNoise>1.3e-2 1.3e-2 1.3e-2</gaussianNoise>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <plugin name='quadrotor_gps_sim' filename='libhector_gazebo_ros_gps.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>4.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <topicName>fix</topicName>
-        <velocityTopicName>fix_velocity</velocityTopicName>
-        <drift>5.0 5.0 5.0</drift>
-        <gaussianNoise>0.1 0.1 0.1</gaussianNoise>
-        <velocityDrift>0 0 0</velocityDrift>
-        <velocityGaussianNoise>0.1 0.1 0.1</velocityGaussianNoise>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <plugin name='quadrotor_groundtruth_sim' filename='libgazebo_ros_p3d.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>100.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <topicName>ground_truth/state</topicName>
-        <gaussianNoise>0.0</gaussianNoise>
-        <frameName>map</frameName>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <static>0</static>
-      <plugin name='quadrotor_simple_controller' filename='libhector_gazebo_quadrotor_simple_controller.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <stateTopic>ground_truth/state</stateTopic>
-        <imuTopic>ardrone/imu</imuTopic>
-        <topicName>cmd_vel</topicName>
-        <rollpitchProportionalGain>10.0</rollpitchProportionalGain>
-        <rollpitchDifferentialGain>5.0</rollpitchDifferentialGain>
-        <rollpitchLimit>0.5</rollpitchLimit>
-        <yawProportionalGain>2.0</yawProportionalGain>
-        <yawDifferentialGain>1.0</yawDifferentialGain>
-        <yawLimit>1.5</yawLimit>
-        <velocityXYProportionalGain>5.0</velocityXYProportionalGain>
-        <velocityXYDifferentialGain>1.0</velocityXYDifferentialGain>
-        <velocityXYLimit>2</velocityXYLimit>
-        <velocityZProportionalGain>5.0</velocityZProportionalGain>
-        <velocityZDifferentialGain>1.0</velocityZDifferentialGain>
-        <velocityZLimit>0.5</velocityZLimit>
-        <maxForce>30</maxForce>
-        <motionSmallNoise>0.05</motionSmallNoise>
-        <motionDriftNoise>0.03</motionDriftNoise>
-        <motionDriftNoiseTime>5.0</motionDriftNoiseTime>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <plugin name='quadrotor_state_controller' filename='libhector_gazebo_quadrotor_state_controller.so'>
-        <alwaysOn>true</alwaysOn>
-        <updateRate>0.0</updateRate>
-        <bodyName>base_link</bodyName>
-        <stateTopic>ground_truth/state</stateTopic>
-        <imuTopic>ardrone/imu</imuTopic>
-        <sonarTopic>sonar_height</sonarTopic>
-        <topicName>cmd_vel</topicName>
-        <robotNamespace>/</robotNamespace>
-      </plugin>
-      <pose frame=''>0 0 0.5 0 -0 0</pose>
-    </model>
-    <model name='camera_box_RGB'>
-      <link name='object_base_link'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <inertial>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <mass>2</mass>
-          <inertia>
-            <ixx>101</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>200</iyy>
-            <iyz>0</iyz>
-            <izz>101</izz>
-          </inertia>
-        </inertial>
-        <visual name='object_base_link_fixed_joint_lump__object_link_visual'>
-          <pose frame=''>0 0 0 0 1.05 0</pose>
-          <geometry>
-            <box>
-              <size>0.01 0.01 0.01</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <name>Gazebo/Blue</name>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-            </script>
-          </material>
-        </visual>
-        <velocity_decay/>
-        <gravity>1</gravity>
-        <velocity_decay/>
-        <gravity>1</gravity>
-        <velocity_decay/>
-        <self_collide>0</self_collide>
-        <sensor name='bottom_camera' type='camera'>
-          <update_rate>30</update_rate>
-          <camera name='head'>
-            <horizontal_fov>1.39626</horizontal_fov>
-            <image>
-              <width>640</width>
-              <height>360</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.02</near>
-              <far>300</far>
-            </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0</mean>
-              <stddev>0.007</stddev>
-            </noise>
-          </camera>
-          <plugin name='camera_controller' filename='libgazebo_ros_camera.so'>
-            <alwaysOn>true</alwaysOn>
-            <updateRate>0.0</updateRate>
-            <cameraName>/gimbal_upward_RGB_camera</cameraName>
-            <imageTopicName>image_raw</imageTopicName>
-            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-            <frameName>camera_link</frameName>
-            <hackBaseline>0.07</hackBaseline>
-            <distortionK1>0.0</distortionK1>
-            <distortionK2>0.0</distortionK2>
-            <distortionK3>0.0</distortionK3>
-            <distortionT1>0.0</distortionT1>
-            <distortionT2>0.0</distortionT2>
-            <robotNamespace>/</robotNamespace>
-          </plugin>
-          <pose frame=''>0 0 0 0 1.05 0</pose>
-        </sensor>
-        <kinematic>0</kinematic>
-      </link>
-      <pose frame=''>0 0 0 0 -0 0</pose>
-    </model>
   </world>
 </sdf>
