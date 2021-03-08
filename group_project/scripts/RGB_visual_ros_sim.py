@@ -403,12 +403,13 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV) 
     
     #imgplot = plt.imshow(img_hsv, cmap='gray', vmin = 0, vmax = 255)
-    #cv2.imshow('window', image_hsv)
+    #cv2.imshow('window', img_hsv)
+    #cv2.waitKey()
     # plt.show() 
     
     #Devo camboare parametri trasformazione rispetto codice in image_analysis ---> capire perche cambia la trasformazione
-    lower_blue = np.array([200,200,200])#sfumatura più scura
-    upper_blue = np.array([255,255,255])#sfumatura più chiara
+    lower_blue = np.array([0,0,0])#sfumatura più scura
+    upper_blue = np.array([0,0,255])#sfumatura più chiara
     
     # Threshold the HSV image to get only blue colors
     #you forgot to convert to hsv the src image ;D Also, in OpenCV uses BGR, not RGB, so you are thresholding the blue channel. So, in BGR your thresholds should be something like: inRange(src, Scalar(0, 0, 0), Scalar(50, 50, 255), threshold);
@@ -417,9 +418,9 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     blur1 = cv2.bilateralFilter(mask,15,75,75)
     
     
-     #Create separation between structuress
+    # Create separation between structuress
     # for ii in range(0, mask.shape[0]):
-    #     for jj in range(0, mask.shape[1]):
+    #      for jj in range(0, mask.shape[1]):
     #         if (ii >300 and ii < 500):
     #             mask[ii][jj] = 0
    
