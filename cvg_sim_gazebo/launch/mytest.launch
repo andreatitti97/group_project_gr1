@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="wname" default="worlds/block_testworld.world"/>
-  <arg name="world_name" value="$(find cvg_sim_gazebo)/$(arg wname)"/>
+
+  <!-- Spawn box model -->
+  <!-- <arg name="wname" default="worlds/block_testworld.world"/>
+  <arg name="world_name" value="$(find cvg_sim_gazebo)/$(arg wname)"/> -->
+
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(arg world_name)"/>
+    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/block_testworld.world"/>
   </include>
 
   <!-- Spawn simulated quadrotor uav -->
@@ -30,8 +33,8 @@
   <param name="robot_description_RGB"  command="cat '$(find box_urdf)/urdf/camera_box_RGB.urdf'"/>
   <node name="spawn_robot_urdf_RGB" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description_RGB -model camera_box_RGB"/> 
 -->
- <include file="$(find box_urdf)/launch/spawn_camera_box_model.launch" pass_all_args="false"/>
+ <include file="$(find box_urdf)/launch/spawn_camera_box_model.launch" pass_all_args="true"/>
 <!-- Drone navigation -->
- <include file="$(find group_project)/launch/drone_nav.launch" pass_all_args="false" />
+ <include file="$(find group_project)/launch/drone_nav.launch" pass_all_args="true" />
 
 </launch>

@@ -67,6 +67,7 @@ def take_drone_camera_frame():
         try:
             # camera_frame = rospy.wait_for_message('/ardrone/bottom/image_raw', Image, timeout = 1)
             camera_frame = rospy.wait_for_message('/gimbal_bottom_camera/image_raw', Image, timeout = 1)
+            # camera_frame= rospy.Subscriber('/gimbal_bottom_camera/image_raw', Image)
         except:
              rospy.loginfo('Unable to reach the drone camera topic. Try to connect again')
         bridge = CvBridge()
@@ -82,7 +83,10 @@ def take_drone_camera_RGB_frame():
         except:
              rospy.loginfo('Unable to reach the drone camera topic. Try to connect again')
         bridge = CvBridge()
-        cv_image = bridge.imgmsg_to_cv2(camera_frame, desired_encoding='bgr8')         
+        cv_image = bridge.imgmsg_to_cv2(camera_frame, desired_encoding='bgr8')
+        #cv2.imshow('RGBframe', cv_image)
+        #cv2.waitKey(2)
+
     return cv_image
 
 def receive_estimated_control_point_P1():
@@ -123,6 +127,7 @@ def receive_estimated_control_point_P2():
 def publish_navigation_Thermo_point(x1, y1, x2, y2):
     pub = rospy.Publisher('Thermo_control_point_1', Point, queue_size=1)
     pub2 = rospy.Publisher('Thermo_control_point_2', Point, queue_size=1)
+    
    
     #Punto 1
     msg = Point()
@@ -177,6 +182,9 @@ def publish_navigation_RGB_point(x1_RGB, y1_RGB, x2_RGB, y2_RGB):
     msg1_RGB.z = 0.0
     pub2_RGB2.publish(msg1_RGB)
     
+    # Test
+    rospy.loginfo("msg1_RGB.x: %f", msg1_RGB.x)
+    rospy.loginfo("msg1_RGB.y: %f", msg1_RGB.y)
     
     
     
