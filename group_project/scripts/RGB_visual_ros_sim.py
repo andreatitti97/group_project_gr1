@@ -403,8 +403,8 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV) 
     
     #imgplot = plt.imshow(img_hsv, cmap='gray', vmin = 0, vmax = 255)
-    #cv2.imshow('window', img_hsv)
-    #cv2.waitKey()
+    #cv2.imshow('window', image)
+    #cv2.waitKey(2)
     # plt.show() 
     
     #Devo camboare parametri trasformazione rispetto codice in image_analysis ---> capire perche cambia la trasformazione

@@ -398,10 +398,10 @@ void  evaluate_control_point(bool from_image)
     else
     {
      cout<< "[IMAGE NAVIGATION] FOllowing Estimated line!" << endl;
-     x_target_P1_body = drone.control_Thermo_point1_x;
-     y_target_P1_body = drone.control_Thermo_point1_y;
-     x_target_P2_body = drone.control_Thermo_point2_x;
-     y_target_P2_body = drone.control_Thermo_point2_y;
+     x_target_P1_body = drone.control_RGB_point1_x;
+     y_target_P1_body = drone.control_RGB_point1_y;
+     x_target_P2_body = drone.control_RGB_point2_x;
+     y_target_P2_body = drone.control_RGB_point2_y;
      
      a = drone.xh_b[0];
      c = drone.xh_b[1];
@@ -694,7 +694,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
 
    */
   
-   if(drone.flagDroneThermoControlPoint1 == true && drone.flagDroneThermoControlPoint2 ==true && mission.structure_array_initialization == false || drone.image_control_count < 50)
+   /*if(drone.flagDroneThermoControlPoint1 == true && drone.flagDroneThermoControlPoint2 ==true && mission.structure_array_initialization == false || drone.image_control_count < 50)
    {
       
        Kalman_Filter.Kalman_Filter_calculate( mission.x_target_P1,mission.y_target_P1, mission.x_target_P2, mission.y_target_P2,  drone.thermo_control_obs_P1_x_world ,  drone.thermo_control_obs_P1_y_world ,  drone.thermo_control_obs_P2_x_world ,  drone.thermo_control_obs_P2_y_world  );
@@ -718,12 +718,12 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
        //torno alla navigazione via GPS
        from_image = false; 
    }
-   
+   */
    
    
   
    //Update Kalamn FIlter Estimation with RGB observation if available
-   if(drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && mission.structure_array_initialization == false || drone.image_control_count < 50)
+   if(drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && mission.structure_array_initialization == false || drone.image_control_count < 5)
    {
         
        Kalman_Filter.Kalman_Filter_calculate(mission.x_target_P1,mission.y_target_P1, mission.x_target_P2, mission.y_target_P2, drone.RGB_control_obs_P1_x_world, drone.RGB_control_obs_P1_y_world, drone.RGB_control_obs_P2_x_world, drone.RGB_control_obs_P2_y_world); 
@@ -744,7 +744,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
    {
        //Se non ci sono piu nuove osservazioni anche per oltre il numero concesso di osservazioni 
        //torno alla navigazione via GPS
-       from_image = false; 
+       //from_image = false; // TestAAA
    }
    
   //Evaluate control points to follow the GPS or estimated control line 
@@ -766,7 +766,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
 //Permette a tutte le osservaziinidel filtri di essere inizializzate correttamente 
 //finche non diventa false il flag il drone è guidato via Waypoint lungo la vela 
 
-  if (mission.navigation_iteration_count > 20)
+  if (mission.navigation_iteration_count > 100) //cambiamento 
   {
        mission.structure_array_initialization = false;
       // from_image = false;
@@ -781,7 +781,7 @@ if (from_image == true)
 mission.navigation_iteration_count = mission.navigation_iteration_count + 1;
 
 mission.cartesian_distance_err = sqrt(pow(mission.x_target_P2- drone.drone_x,2) + pow(mission.y_target_P2- drone.drone_y,2)); //distanza dal raggiungere la fine del oannello
-if (mission.cartesian_distance_err < 1.5 or waypoints.error_from_GPS_line > 1.5)
+/*if (mission.cartesian_distance_err < 1.5 or waypoints.error_from_GPS_line > 1.5)
   {
       from_image = false;
   }
@@ -793,7 +793,7 @@ if (mission.cartesian_distance_err < 1.5 or waypoints.error_from_GPS_line > 1.5)
    drone.yaw_des = drone.drone_Yaw + M_PI; //ROtate drone
    mission.state = 2; //Cambio di array
    mission.count = mission.count + 1;
- } 
+ } */
 }
 
 /* Permette il passaggio alla struttura sucesiva 
