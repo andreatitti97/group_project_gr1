@@ -577,13 +577,16 @@ void start(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID *pid
                 
    mission.x_target_P2 =  structure -> obtain_xcoo_structure_world_frame()[mission.count + 1];
    mission.y_target_P2 =  structure -> obtain_ycoo_structure_world_frame()[mission.count + 1];
-   
-  
+   cout << "P1_x:" << mission.x_target_P1 << endl;
+   cout << "P1_y:" << mission.y_target_P1 << endl;
+   cout << "P2_x:" << mission.x_target_P2 << endl;
+   cout << "P2_y:" << mission.y_target_P2 << endl;
    mission.P1_target.push_back(mission.x_target_P1);
    mission.P1_target.push_back(mission.y_target_P1);
    mission.P2_target.push_back(mission.x_target_P2);
    mission.P2_target.push_back(mission.y_target_P2);
-  
+   
+
    //Point Relative to GPS waypoints 
     waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[mission.count]);
     waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[mission.count]);
@@ -646,7 +649,11 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
                 
     mission.x_target_P2 =  structure->obtain_xcoo_structure_world_frame()[mission.count];
     mission.y_target_P2 =  structure->obtain_ycoo_structure_world_frame()[mission.count];
-
+    
+   cout << "P1_x:" << mission.x_target_P1 << endl;
+   cout << "P1_y:" << mission.y_target_P1 << endl;
+   cout << "P2_x:" << mission.x_target_P2 << endl;
+   cout << "P2_y:" << mission.y_target_P2 << endl;
 
     //Point to pass to Kalman FIlter class function
     
@@ -664,20 +671,21 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
     
 
    //ROtate COntrol observation points obtained from thermo and RGB camera to world frame
-   Rotation_BF_to_GF_des_pos(drone.control_Thermo_point1_x, drone.control_Thermo_point1_y, drone.drone_Yaw);
+   /*Rotation_BF_to_GF_des_pos(drone.control_Thermo_point1_x, drone.control_Thermo_point1_y, drone.drone_Yaw);
   
    drone.thermo_control_obs_P1_x_world = check_x_w;
    drone.thermo_control_obs_P1_y_world = check_y_w;
   
    Rotation_BF_to_GF_des_pos(drone.control_Thermo_point2_x, drone.control_Thermo_point2_y, drone.drone_Yaw);
    drone.thermo_control_obs_P2_x_world = check_x_w;
-   drone.thermo_control_obs_P2_y_world = check_y_w;
+   drone.thermo_control_obs_P2_y_world = check_y_w; */
+
    Rotation_BF_to_GF_des_pos(drone.control_RGB_point1_x, drone.control_RGB_point1_y, drone.drone_Yaw);
    drone.RGB_control_obs_P1_x_world = check_x_w;
    drone.RGB_control_obs_P1_y_world = check_y_w;
    Rotation_BF_to_GF_des_pos(drone.control_RGB_point2_x, drone.control_RGB_point2_y, drone.drone_Yaw);
    drone.RGB_control_obs_P2_x_world = check_x_w;
-  drone.RGB_control_obs_P2_y_world = check_y_w;
+   drone.RGB_control_obs_P2_y_world = check_y_w;
 
    //Initilize Kalman Filter
    if (mission.KF_Initialization == true)
@@ -728,17 +736,21 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
    
   
    //Update Kalamn FIlter Estimation with RGB observation if available
-   if(drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && mission.structure_array_initialization == false || drone.image_control_count < 50)
+   if(drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && mission.structure_array_initialization == false || drone.image_control_count < 50 ) //|| drone.image_control_count < 50
    {
-        
+       from_image = true; 
        Kalman_Filter.Kalman_Filter_calculate(mission.x_target_P1,mission.y_target_P1, mission.x_target_P2, mission.y_target_P2, drone.RGB_control_obs_P1_x_world, drone.RGB_control_obs_P1_y_world, drone.RGB_control_obs_P2_x_world, drone.RGB_control_obs_P2_y_world); 
+       cout << "RGB_P1_x = " << drone.RGB_control_obs_P1_x_world << endl;
+       cout << "RGB_P1_y = " << drone.RGB_control_obs_P1_y_world << endl;
+       cout << "RGB_P2_x = " << drone.RGB_control_obs_P2_x_world << endl;
+       cout << "RGB_P2_y = " << drone.RGB_control_obs_P2_y_world << endl;
        drone.xh_ = Kalman_Filter.Obtain_Kalman_filter_estimated_state();
        drone.obs = Kalman_Filter.Obtain_Kalman_filter_observation();
         cout << "[KALMAN FILTER RGB] Observations : a  " << drone.obs[0] << " c: " << drone.obs[1] << endl;
        cout << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
        //cout << "array_init = " << mission.structure_array_initialization << endl;
        //cout << "RGB_control_point1" << drone.flagDroneRGBControlPoint1 << endl;
-       from_image = true;
+       // from_image = true;
       if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2== true &&  waypoints.error_from_GPS_line < 1.5)
       {
         //Resetto counter 
@@ -773,7 +785,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
 //Permette a tutte le osservaziinidel filtri di essere inizializzate correttamente 
 //finche non diventa false il flag il drone è guidato via Waypoint lungo la vela 
 
-  if (mission.navigation_iteration_count > 100) //cambiamento 
+  if (mission.navigation_iteration_count > 20) //cambiamento 
   {
        mission.structure_array_initialization = false;
        //cout << "PROVA_ARRAY_INIT";
@@ -897,10 +909,10 @@ int main(int argc, char** argv)
     
     
     //Per le misure di ciasucna configurazione fare riferimento al file ardrone_testworld.world
-    Eigen::Vector2f structure_center_W(6.37, 2);
+    Eigen::Vector2f structure_center_W(6.37, 2); //6.37 , 2
     float theta = 0; //45.0 * M_PI/180;
     float size = 1.0;
-    float length = 11;
+    float length = 11; //11
     
     //Create a vector of structure for each structure
     Structure structure(structure_center_W, theta, size, length);

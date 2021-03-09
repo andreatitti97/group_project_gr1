@@ -385,9 +385,9 @@ void StructureImpl::place_structure_start_end_point(float n_structure, float dis
 
 
             cout <<"P1 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
-            // cout <<"P1 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
-            // cout <<"P2 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
-            // cout <<"P2 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
+            cout <<"P1 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
+            cout <<"P2 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
+            cout <<"P2 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
         }
 
     }
@@ -408,7 +408,7 @@ void StructureImpl::init(float n_structure, float distance_between_structures,in
     {
         xcenter_structure_frame.push_back(0.0);
         ycenter_structure_frame.push_back(- i * distance_between_structures); //Panels aligned along axe y in negative direction
-        cout<< "x center structure "<< i + 1 <<"frame : " << ycenter_structure_frame[i] << endl;
+        cout<< "x center structure "<< i + 1 <<"frame : " << xcenter_structure_frame[i] << endl;
         cout<< "y center structure "<< i + 1 <<"frame : " << ycenter_structure_frame[i] << endl;
 
         //Trasformation from structure frame to world frame.. The center of structure 1 in world frame is located in main
