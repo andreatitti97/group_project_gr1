@@ -269,7 +269,8 @@ void drone_RGB_control_point1_callback(const geometry_msgs::Point::ConstPtr& msg
     drone_RGB_control_point1 = *msg;
     drone.control_RGB_point1_x = drone_RGB_control_point1.x;
     drone.control_RGB_point1_y= drone_RGB_control_point1.y;
-
+    cout << "RGB_point1_x = " << drone.control_RGB_point1_x << endl;
+    cout << "RGB_point1_y = " << drone.control_RGB_point1_y << endl;
     drone.RGB_detection_count = 0;
     drone.flagDroneRGBControlPoint1 = true;
      
@@ -283,6 +284,8 @@ void drone_RGB_control_point2_callback(const geometry_msgs::Point::ConstPtr& msg
     drone_RGB_control_point2 = *msg;
     drone.control_RGB_point2_x = drone_RGB_control_point2.x;
     drone.control_RGB_point2_y= drone_RGB_control_point2.y;
+    cout << "RGB_point2_x = " << drone.control_RGB_point2_x << endl;
+    cout << "RGB_point2_y = " << drone.control_RGB_point2_y << endl;
     drone.RGB_detection_count = 0;
     drone.flagDroneRGBControlPoint2 = true;
      
@@ -436,7 +439,7 @@ void  evaluate_control_point(bool from_image)
             rot_Vy = Vx_norm[0] * sin(M_PI) + Vx_norm[1] * cos(M_PI);
             Vx_norm[0] = rot_Vx;
             Vx_norm[1] = rot_Vy;
-            //cout<< "sono qui"<< endl;
+            cout<< "sono qui"<< endl;
          }
          else
          {
@@ -587,13 +590,13 @@ void start(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID *pid
     waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[mission.count + 1]); 
     waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[mission.count + 1]);
    
-   // evaluate_control_point(from_image);
+   //evaluate_control_point(from_image);
 
    mission.x_target = structure -> obtain_xcoo_structure_world_frame()[mission.count];
    mission.y_target = structure -> obtain_ycoo_structure_world_frame()[mission.count];
    
 
-  //cout << "[START MISSION]--> Reaching P1 structure "<< mission.count +1 << " --> distance --> " <<  mission.cartesian_distance_err<< endl;
+   cout << "[START MISSION]--> Reaching P1 structure "<< mission.count +1 << " --> distance --> " <<  mission.cartesian_distance_err<< endl;
 
    mission.cartesian_distance_err = sqrt(pow(mission.x_target- drone.drone_x,2) + pow(mission.y_target- drone.drone_y,2));
    drone.drone_vel_msg.angular.z  = pid_yaw -> position_control_knowing_velocity(drone.yaw_des , abs(drone.drone_Yaw), 0, drone.drone_ang_vel_z);
@@ -630,6 +633,7 @@ void start(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID *pid
         mission.KF_Initialization = true;
         mission.structure_array_initialization = true; //necessaria per la corretta inizializazzione Kalman Filter
         mission.state = 1; //Quando 1 mi muovo lungo il struttura tra punti 1 e 2
+        cout << "Switch to NAVIGATION"<<endl;
     }
 }
 
@@ -680,6 +684,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
    {
         Kalman_Filter.Kalman_filter_initialization(mission.x_target_P1,mission.y_target_P1, mission.x_target_P2, mission.y_target_P2, waypoints.GPS_P1_x ,  waypoints.GPS_P1_y,  waypoints.GPS_P2_x,  waypoints.GPS_P2_y);
         mission.KF_Initialization = false;
+
    }
    
    //Update Kalman Filter estimation with thermal observation
@@ -723,7 +728,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
    
   
    //Update Kalamn FIlter Estimation with RGB observation if available
-   if(drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && mission.structure_array_initialization == false || drone.image_control_count < 5)
+   if(drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && mission.structure_array_initialization == false || drone.image_control_count < 50)
    {
         
        Kalman_Filter.Kalman_Filter_calculate(mission.x_target_P1,mission.y_target_P1, mission.x_target_P2, mission.y_target_P2, drone.RGB_control_obs_P1_x_world, drone.RGB_control_obs_P1_y_world, drone.RGB_control_obs_P2_x_world, drone.RGB_control_obs_P2_y_world); 
@@ -731,12 +736,14 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
        drone.obs = Kalman_Filter.Obtain_Kalman_filter_observation();
         cout << "[KALMAN FILTER RGB] Observations : a  " << drone.obs[0] << " c: " << drone.obs[1] << endl;
        cout << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
+       //cout << "array_init = " << mission.structure_array_initialization << endl;
+       //cout << "RGB_control_point1" << drone.flagDroneRGBControlPoint1 << endl;
        from_image = true;
-       if (drone.flagDroneThermoControlPoint1 == true && drone.flagDroneThermoControlPoint2== true &&  waypoints.error_from_GPS_line < 1.5)
+      if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2== true &&  waypoints.error_from_GPS_line < 1.5)
       {
         //Resetto counter 
         drone.image_control_count = 0;
-      }
+      } 
         KF_estimation_exportation_in_BF_for_control_point_generation();
       
    }
@@ -744,7 +751,7 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
    {
        //Se non ci sono piu nuove osservazioni anche per oltre il numero concesso di osservazioni 
        //torno alla navigazione via GPS
-       //from_image = false; // TestAAA
+       from_image = false; // TestAAA
    }
    
   //Evaluate control points to follow the GPS or estimated control line 
@@ -769,19 +776,20 @@ void navigation(Structure *structure, PID * pid_x, PID * pid_y, PID * pid_z, PID
   if (mission.navigation_iteration_count > 100) //cambiamento 
   {
        mission.structure_array_initialization = false;
+       //cout << "PROVA_ARRAY_INIT";
       // from_image = false;
   }
  
 if (from_image == true)
 {
     //FInche flag rimane true continuo ad incrementare counter. 
-    // verra resettato solo quando i flag callback sono ture 
+    // verra resettato solo quando i flag callback sono true 
     drone.image_control_count = drone.image_control_count  + 1;
 }
 mission.navigation_iteration_count = mission.navigation_iteration_count + 1;
 
 mission.cartesian_distance_err = sqrt(pow(mission.x_target_P2- drone.drone_x,2) + pow(mission.y_target_P2- drone.drone_y,2)); //distanza dal raggiungere la fine del oannello
-/*if (mission.cartesian_distance_err < 1.5 or waypoints.error_from_GPS_line > 1.5)
+if (mission.cartesian_distance_err < 1.5 or waypoints.error_from_GPS_line > 1.5)
   {
       from_image = false;
   }
@@ -793,7 +801,7 @@ mission.cartesian_distance_err = sqrt(pow(mission.x_target_P2- drone.drone_x,2) 
    drone.yaw_des = drone.drone_Yaw + M_PI; //ROtate drone
    mission.state = 2; //Cambio di array
    mission.count = mission.count + 1;
- } */
+ }
 }
 
 /* Permette il passaggio alla struttura sucesiva 
