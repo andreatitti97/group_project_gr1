@@ -138,6 +138,9 @@ void KF_Impl::Kalman_Filter_calculate( float target_point_P1_x,  float target_po
       float c_obs = ((-1*a_obs * obs_points_P1_x) + obs_points_P1_y);
 
       cout<< "[KALMAN FILTER] a_target : "<< a_target << "     c_target: "<< c_target << endl;
+      cout<< "[KALMAN FILTER] target point P1:" << target_point_P1_x << "," << target_point_P1_y << endl;
+      cout<< "[KALMAN FILTER] obsv point P1:" << obs_points_P1_x << "," << obs_points_P1_y << endl;
+
       //cout<< "[KALMAN FILTER] OBSERVATIONS:  a_obs : "<< a_obs <<"    c_obs: "<< c_obs << endl;
 
 

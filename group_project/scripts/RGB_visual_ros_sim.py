@@ -408,8 +408,8 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     # plt.show() 
     
     #Devo camboare parametri trasformazione rispetto codice in image_analysis ---> capire perche cambia la trasformazione
-    lower_blue = np.array([0,0,0])#sfumatura più scura
-    upper_blue = np.array([0,0,255])#sfumatura più chiara
+    lower_blue = np.array([0,50,50])#sfumatura più scura  0 0 0 
+    upper_blue = np.array([10,255,255])#sfumatura più chiara 0 0 255
     
     # Threshold the HSV image to get only blue colors
     #you forgot to convert to hsv the src image ;D Also, in OpenCV uses BGR, not RGB, so you are thresholding the blue channel. So, in BGR your thresholds should be something like: inRange(src, Scalar(0, 0, 0), Scalar(50, 50, 255), threshold);
