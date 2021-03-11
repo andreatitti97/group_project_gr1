@@ -587,8 +587,10 @@ void start(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *pid_ya
         drone.drone_vel_msg.linear.y = pid_y->calculate(check_y_b, drone.drone_y_b);
     }
 
+    cout << "mission cartesian distance error: " << mission.cartesian_distance_err << endl;
+
     //Raggiunto Point P1 mi dirigo verso point P2
-    if (mission.cartesian_distance_err < 0.2)
+    if (mission.cartesian_distance_err < 0.3)
     {
         mission.flag_end_point = true; //Mi dirigo lungo il struttura verso punto P2 di end --> passo all'else sottostante
         mission.flag_create_setpoint = true;
