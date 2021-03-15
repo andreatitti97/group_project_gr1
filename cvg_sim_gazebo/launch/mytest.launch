@@ -9,14 +9,14 @@
   <!-- Empty World: ~/worlds_backup/empty.world
        Ardrone World: ~/worlds/ardrone_testworld.world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/redblock_testworld.world"/>
+    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/block_testworld.world"/>
   </include>
 
   <!-- Spawn simulated quadrotor uav  -->
  
-    <include file="$(find cvg_sim_gazebo)/launch/spawn_quadrotor.launch" > 
+   <include file="$(find cvg_sim_gazebo)/launch/spawn_quadrotor.launch" > 
     <arg name="model" value="$(find cvg_sim_gazebo)/urdf/quadrotor_sensors.urdf.xacro"/> 
-  </include>
+  </include> 
 
 
   <!--Spawn RGB Camera -->

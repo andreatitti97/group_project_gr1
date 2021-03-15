@@ -183,7 +183,9 @@ def draw_estimated_line(P1, P2, image, drone_obj):
     print("a: {}, c: {}".format(a,c))
     #Find all the points that lies on the line 
 
-    cv2.line(image, (int(a*image.shape[0] + c), image.shape[1]), (int(c), 0), (0,0,255), 2)
+    cv2.line(image, (int(a*image.shape[0] + c), image.shape[1]), (int(c), 0), (255,255,0), 2)
+    cv2.imshow("image",image)
+    cv2.waitKey(1)
     return image
     
 
@@ -198,7 +200,7 @@ def line_point_exportation_in_drone_body_frame(u1,v1,u2,v2, v0, u0, drone_obj):
    const = 0.00146
    
    gain_y = 0.5
-   
+   #gain_test = -2
    #Point 1 
    #xb1 = -(const) * ((y1 * original_image_shape[1])/v0 -  original_image_shape[1])* drone_obj.z
    xb1 = -(const) * ((v1  -  v0 )* drone_obj.z)
@@ -211,16 +213,16 @@ def line_point_exportation_in_drone_body_frame(u1,v1,u2,v2, v0, u0, drone_obj):
    yb2 =  1*gain_y*(const) * ((u2 - u0  )* drone_obj.z)
    
    
-   # print('v0: ', v0)
-   # print('u0: ', u0)
-   # # print('original_image_shape[0]: ', original_image_shape[0])
-   # # print('original_image_shape[1]: ',original_image_shape[1])
-   # print('xb1: {0} v1: {1}'.format(xb1, v1))
-   # print('yb1: {0} u1: {1}'.format(yb1, u1))
-   # print('xb2: {0} v2: {1}'.format(xb2, v2))
-   # print('yb2: {0} u2: {1}'.format(yb2, u2))
+   print('v0: ', v0)
+   print('u0: ', u0)
+   # print('original_image_shape[0]: ', original_image_shape[0])
+   # print('original_image_shape[1]: ',original_image_shape[1])
+   print('xb1: {0} v1: {1}'.format(xb1, v1))
+   print('yb1: {0} u1: {1}'.format(yb1, u1))
+   print('xb2: {0} v2: {1}'.format(xb2, v2))
+   print('yb2: {0} u2: {1}'.format(yb2, u2))
     
-   # print('######### PANEL LINE RECOGNIZED, FOLLOWING')
+   print('######### PANEL LINE RECOGNIZED, FOLLOWING')
    # Publish over the air The message with control points 
    publish_navigation_RGB_point(xb1, yb1, xb2, yb2)
 
@@ -272,10 +274,14 @@ def clustering_lines(start_point, end_point, points, row, col, angular_coefficie
                vx_jj = angular_line_versors[jj][0][0]
                vy_jj = angular_line_versors[jj][0][1]
                #siccome versori, gia allineati agli assi posso sommare le componenti dei descrittori delle due rette per ottenere la magnitudine della risultante V
-               Vx = vx - vx_jj 
-               Vy = vy - vy_jj
-               V = math.sqrt(Vx*Vx + Vy*Vy)
-               
+               if (abs(vx)-abs(vx_jj)) < 0.2 or (abs(vy)-abs(vy_jj)) < 0.2 :
+                    Vx = abs(vx) -abs(vx_jj)
+                    Vy = abs(vy) - abs(vy_jj)
+                    V = math.sqrt(Vx*Vx + Vy*Vy)
+               else :
+                    Vx = vx - vx_jj 
+                    Vy = vy - vy_jj
+                    V = math.sqrt(Vx*Vx + Vy*Vy)
               
                # print('ii: {0} jj: {1}'.format(ii, jj))
                # print('row_ii_start: {0}  row_jj_start: {1}  row_ii_end: {2} row_jj_end: {3}'.format(line_ii_start_x,line_jj_start_x, line_ii_end_x, line_jj_end_x))
@@ -408,8 +414,8 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     # plt.show() 
     
     #Devo camboare parametri trasformazione rispetto codice in image_analysis ---> capire perche cambia la trasformazione
-    lower_blue = np.array([0,50,50])#sfumatura più scura  0 0 0 
-    upper_blue = np.array([10,255,255])#sfumatura più chiara 0 0 255
+    lower_blue = np.array([0,0,0])#sfumatura più scura  0 0 0 
+    upper_blue = np.array([0,0,255])#sfumatura più chiara 0 0 255
     
     # Threshold the HSV image to get only blue colors
     #you forgot to convert to hsv the src image ;D Also, in OpenCV uses BGR, not RGB, so you are thresholding the blue channel. So, in BGR your thresholds should be something like: inRange(src, Scalar(0, 0, 0), Scalar(50, 50, 255), threshold);
@@ -461,7 +467,8 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
            # cv2.drawContours(image, [out_table], -1, (0, 255, 0), 3)
            #ritorna i vettori normalizzati lungo x e y e un punto xo yo sulla retta
            [vx,vy,x,y] = cv2.fitLine(out_table,cv2.DIST_L2,0,0.01,0.01)
-          
+           rospy.loginfo("Line parameters :"+str(vx) +" " +str(vy))
+           rospy.loginfo("Points :"+str(x) +" " +str(y))
        #intersezione della retta con asse y della figura nel punto x = 0 
            lefty= int((-x*vy/vx)+y)
            # print('lefty:',lefty)
@@ -555,6 +562,12 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
                single_cluster.append(img)
            countours_considered.append([out_table])
            count = count + 1
+           
+           #cv2.imshow('image',image)
+           #cv2.waitKey(1)
+
+    #cv2.imshow('image',image)
+    #cv2.waitKey(1)
     # imgplot = plt.imshow(image,cmap='gray', vmin = 0, vmax = 255)
     # plt.show()    
     
@@ -631,7 +644,8 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
             # else:
             #       cv2.line(image, (image.shape[0], y_down), (0, b0), (255,0,0), 2)    
      
-       
+       #cv2.imshow('image',image)
+       #cv2.waitKey(1)
        # try:      
        #     cv2.line(image,(thresh.shape[1]-1,righty),(0,lefty),255,2)   
        # except:
@@ -760,7 +774,7 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
         
         
         try:      
-           cv2.line(image,(thresh.shape[1]-1,righty),(0,lefty),255,2)   
+           cv2.line(image,(thresh.shape[1]-1,righty),(0,lefty),55,2)   
         except:
             pass
     # print('cartesian_distance_point_from_image_center: ', cartesian_distance_point_from_image_center)

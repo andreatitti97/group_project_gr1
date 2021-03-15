@@ -80,6 +80,7 @@
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
+        <gravity>1</gravity>
       </link>
       <static>1</static>
     </model>
@@ -124,7 +125,7 @@
         <visual name='visual'>
           <geometry>
             <box>
-              <size>3.81903 6.23279 0.155261</size>
+              <size>3.81903 6.2328 0.155261</size>
             </box>
           </geometry>
           <material>
@@ -150,7 +151,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <box>
-              <size>3.81903 6.23279 0.155261</size>
+              <size>3.81903 6.2328 0.155261</size>
             </box>
           </geometry>
           <surface>
@@ -204,6 +205,52 @@
       <allow_auto_disable>1</allow_auto_disable>
       <pose frame=''>3.41175 3.79399 0 0 -0 0</pose>
     </model>
+    <state world_name='default'>
+      <sim_time>361 90000000</sim_time>
+      <real_time>103 950527857</real_time>
+      <wall_time>1615475397 570273726</wall_time>
+      <iterations>103564</iterations>
+      <model name='plane1_model'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='body'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='unit_red_box'>
+        <pose frame=''>2.07334 -0.210135 0.07763 0 -0 0.098826</pose>
+        <scale>1.44858 0.575292 1</scale>
+        <link name='link'>
+          <pose frame=''>2.07334 -0.210135 0.07763 0 -0 0.098826</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0.117241 -0.040827 -4.94508 -2.50801 -1.55184 -3.14154</acceleration>
+          <wrench>-0.43333 -0.150899 -18.2773 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='unit_red_box_clone'>
+        <pose frame=''>7.41762 0.187768 0.077625 0 -2e-06 0.081234</pose>
+        <scale>2.69128 1 1</scale>
+        <link name='link'>
+          <pose frame=''>7.41762 0.187768 0.077625 0 -2e-06 0.081234</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>-0.269783 -0.027916 -8.0093 -2.57118 0.370043 3.14097</acceleration>
+          <wrench>-0.997132 -0.10318 -29.6028 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='my_light'>
+        <pose frame=''>0 0 30 0 -0 0</pose>
+      </light>
+    </state>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>13.7024 9.99748 10.4038 0 0.801938 -2.38555</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
     <model name='unit_red_box_clone'>
       <link name='link'>
         <pose frame=''>0 0 0 0 -0 0</pose>
@@ -225,7 +272,7 @@
         <visual name='visual'>
           <geometry>
             <box>
-              <size>3.81903 6.23279 0.155261</size>
+              <size>1.77385 3.69412 0.155261</size>
             </box>
           </geometry>
           <material>
@@ -251,7 +298,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <box>
-              <size>3.81903 6.23279 0.155261</size>
+              <size>1.77385 3.69412 0.155261</size>
             </box>
           </geometry>
           <surface>
@@ -303,53 +350,7 @@
       </link>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose frame=''>7.05867 6.69831 0.07763 0 -0 0.672498</pose>
+      <pose frame=''>5.15983 5.25186 0.07763 0 -0 0.672498</pose>
     </model>
-    <state world_name='default'>
-      <sim_time>105 791000000</sim_time>
-      <real_time>107 271910671</real_time>
-      <wall_time>1615326100 747521592</wall_time>
-      <iterations>105791</iterations>
-      <model name='plane1_model'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='body'>
-          <pose frame=''>0 0 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='unit_red_box'>
-        <pose frame=''>3.41175 3.79399 0.07763 0 -0 0.672498</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>3.41175 3.79399 0.07763 0 -0 0.672498</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='unit_red_box_clone'>
-        <pose frame=''>7.05867 6.69831 0.07763 0 -0 0.672498</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>7.05867 6.69831 0.07763 0 -0 0.672498</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <light name='my_light'>
-        <pose frame=''>0 0 30 0 -0 0</pose>
-      </light>
-    </state>
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose frame=''>18.5781 12.4066 9.69276 0 0.359643 -2.67899</pose>
-        <view_controller>orbit</view_controller>
-        <projection_type>perspective</projection_type>
-      </camera>
-    </gui>
   </world>
 </sdf>

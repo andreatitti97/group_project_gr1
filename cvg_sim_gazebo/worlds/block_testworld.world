@@ -57,6 +57,7 @@
         </visual>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
+        <gravity>1</gravity>
       </link>
     </model>
     <gravity>0 0 -9.8</gravity>
@@ -80,24 +81,24 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <state world_name='default'>
-      <sim_time>164 254000000</sim_time>
-      <real_time>165 856506434</real_time>
-      <wall_time>1615227387 670914763</wall_time>
-      <iterations>164254</iterations>
+      <sim_time>254 265000000</sim_time>
+      <real_time>90 283420508</real_time>
+      <wall_time>1615647378 231124111</wall_time>
+      <iterations>90011</iterations>
       <model name='block_testworld.world'>
-        <pose frame=''>2.60977 1.14972 0.086323 0 -0 0.431159</pose>
+        <pose frame=''>2.31069 1.2604 0.086323 0 -0 0.040273</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>2.60977 1.14972 0.086323 0 -0 0.431159</pose>
+          <pose frame=''>2.31069 1.2604 0.086323 0 -0 0.040273</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
+          <acceleration>-0.134794 1.87056 7.82147 -2.91518 -1.45775 -0.088762</acceleration>
+          <wrench>-0.134794 1.87056 7.82147 0 -0 0</wrench>
         </link>
         <link name='link_clone'>
-          <pose frame=''>7.27338 3.11071 0.086323 0 -0 0.323519</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
+          <pose frame=''>7.36981 1.29701 0.08395 0 0.001013 -0.026984</pose>
+          <velocity>0.0049 -0.000131 -0.145063 0.001787 0.066203 1.2e-05</velocity>
+          <acceleration>9.8 -0.2624 0 -2.70936 0.460096 -0</acceleration>
+          <wrench>9.8 -0.2624 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='ground_plane'>
@@ -305,6 +306,7 @@
             </contact>
           </surface>
         </collision>
+        <gravity>1</gravity>
       </link>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
@@ -312,7 +314,7 @@
     </model>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>6.50791 17.2629 3.98353 0 0.395643 -2.03499</pose>
+        <pose frame=''>14.7364 12.0784 18.0539 0 0.855643 -2.43499</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

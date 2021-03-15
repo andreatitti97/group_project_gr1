@@ -183,8 +183,8 @@ def publish_navigation_RGB_point(x1_RGB, y1_RGB, x2_RGB, y2_RGB):
     pub2_RGB2.publish(msg1_RGB)
     
     # Test
-    #rospy.loginfo("msg1_RGB.x: %f", msg1_RGB.x)
-    #rospy.loginfo("msg1_RGB.y: %f", msg1_RGB.y)
+    rospy.loginfo("msg1_RGB.x: %f", msg1_RGB.x)
+    rospy.loginfo("msg1_RGB.y: %f", msg1_RGB.y)
     
     
     

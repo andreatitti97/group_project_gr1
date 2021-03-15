@@ -458,7 +458,7 @@ void evaluate_control_point(bool from_image)
     float c1 = 0;
 
     //Find equation parameters of the line r2 passing trhoug vector Vy. Line r2 is perpendicular  to line r but passing throung origin --> coeff angolare è
-    float a2 = 1 / a; //Vy_norm[1]/Vy_norm[0];
+    float a2 = -1 / a; //Vy_norm[1]/Vy_norm[0]; era 1/a
     float b2 = -1;
     float c2 = 0;
 
@@ -716,7 +716,7 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         cout << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
         from_image = true;
         
-        if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 1.5)
+        if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 3) //3
         {
             //Resetto counter
             cout << "image control timer reset " << endl;
@@ -1156,7 +1156,7 @@ Nel caso fosse necessario contattemi che vi spiego meglio.
         bottom_camera_pose_RGB.model_name = (std::string) "camera_box_RGB";
         bottom_camera_pose_RGB.reference_frame = (std::string) "world";
         bottom_camera_pose_RGB.pose.position.x = drone.drone_x;
-        bottom_camera_pose_RGB.pose.position.y = drone.drone_y + 0.1;
+        bottom_camera_pose_RGB.pose.position.y = drone.drone_y;
         bottom_camera_pose_RGB.pose.position.z = drone.drone_z - 0.1;
 
         //Conversion of eulerian angle to quaternion for model state
