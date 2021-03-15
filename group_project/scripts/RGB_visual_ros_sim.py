@@ -184,8 +184,8 @@ def draw_estimated_line(P1, P2, image, drone_obj):
     #Find all the points that lies on the line 
 
     cv2.line(image, (int(a*image.shape[0] + c), image.shape[1]), (int(c), 0), (255,255,0), 2)
-    cv2.imshow("image",image)
-    cv2.waitKey(1)
+    #cv2.imshow("image",image)
+    #cv2.waitKey(1)
     return image
     
 
@@ -221,8 +221,9 @@ def line_point_exportation_in_drone_body_frame(u1,v1,u2,v2, v0, u0, drone_obj):
    print('yb1: {0} u1: {1}'.format(yb1, u1))
    print('xb2: {0} v2: {1}'.format(xb2, v2))
    print('yb2: {0} u2: {1}'.format(yb2, u2))
-    
+   
    print('######### PANEL LINE RECOGNIZED, FOLLOWING')
+  
    # Publish over the air The message with control points 
    publish_navigation_RGB_point(xb1, yb1, xb2, yb2)
 
@@ -700,7 +701,7 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     #--------> Check max voting value 
     #Definisco percentuale limite oltre la quale la retta va scartata  
     #LA retta va scartata se è votata da piu dell'80% delle rette presenti
-    limit_percentage = 0.3 * len(line_versors)  
+    limit_percentage = 0.2 * len(line_versors)  
     for ii in range(0, len(voting_array)):
         #Definsico le rette da mantenere
         if voting_array[ii] >= limit_percentage: 
@@ -794,9 +795,9 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
            
           
             line_considered = line_points[index]
-            # print("########################line_considered: ", line_considered)
+            print("########################line_considered: ", line_considered)
              ############# DEBUGGING TXT FILES ##########
-            # print("######################## mean_distance_of_line_from_center_line: ", mean_distance_of_line_from_center_line[index])
+            print("######################## mean_distance_of_line_from_center_line: ", mean_distance_of_line_from_center_line[index])
           
              ########## Exportation del punto (x,y) della retta e del punto Pv = (x + vx, y + vy) nel body frame del drone (considerando Ar drone 2.0)
             line_point_exportation_in_drone_body_frame(line_considered[0],line_considered[1],line_considered[2],line_considered[3], (thresh.shape[0]/2), (thresh.shape[1]/2), drone_obj)  #Definsico locazione del body frame del drone rispetto l'image plane (esattamente al centro )
@@ -898,6 +899,8 @@ def listener():
         file1.flush()
         
         #Publish output frame in rostopic
+        cv2.imshow("Final Image",clustered_image)
+        cv2.waitKey(3)
         publish_output_RGB_image(clustered_image)
         line_versors_old = line_versors
         end2= time.time() - start1
