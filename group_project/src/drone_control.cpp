@@ -50,6 +50,8 @@ Se avete dubbi contattatemi pure a : luca.morando@edu.unige.it
 
 unsigned int sleep(unsigned int seconds);
 
+unsigned int panel_index = 0;
+
 //Struttura relativa alla gestione dei punti di waypoints
 struct Waypoint_GPS
 {
@@ -356,14 +358,19 @@ void evaluate_control_point(bool from_image)
     float y_target_P1_body = 0.0;
     float x_target_P2_body = 0.0;
     float y_target_P2_body = 0.0;
-
+    cout <<" °°°°°°°°°°°°°°°° Panel Index = " << panel_index << endl;
+    int i = 0;
+    for (i = 0 ; i<8 ; i+=2){
+    cout <<"############### waypoint P1 " << waypoints.GPS_P1_waypoint[i]<< " " << waypoints.GPS_P1_waypoint[i+1]<<endl;
+    cout <<"############### waypoint P2 " << waypoints.GPS_P2_waypoint[i]<< " " << waypoints.GPS_P2_waypoint[i+1]<<endl;
+    }
     //Rotate Point P1 in drone body frame
-    Rotation_GF_to_BF_des_pos(waypoints.GPS_P1_waypoint[0], waypoints.GPS_P1_waypoint[1], drone.drone_Yaw);
+    Rotation_GF_to_BF_des_pos(waypoints.GPS_P1_waypoint[panel_index], waypoints.GPS_P1_waypoint[panel_index+1], drone.drone_Yaw);
     x_target_P1_body = check_x_b;
     y_target_P1_body = check_y_b;
 
     //Rotate Point P2 in drone body frame
-    Rotation_GF_to_BF_des_pos(waypoints.GPS_P2_waypoint[0], waypoints.GPS_P2_waypoint[1], drone.drone_Yaw); // mission.y_target_P2
+    Rotation_GF_to_BF_des_pos(waypoints.GPS_P2_waypoint[panel_index], waypoints.GPS_P2_waypoint[panel_index+1], drone.drone_Yaw); // mission.y_target_P2
     x_target_P2_body = check_x_b;
     y_target_P2_body = check_y_b;
 
@@ -375,6 +382,7 @@ void evaluate_control_point(bool from_image)
         //Evaluate parameters a, b c of the line equation ax^b + by^ + c = 0
         a = ((y_target_P2_body - y_target_P1_body) / (x_target_P2_body - x_target_P1_body));
         c = ((-(a)*x_target_P1_body) + y_target_P1_body);
+        cout << "TEST x_target_p1 = " << x_target_P1_body << "TEST y_target_p1 = " << y_target_P1_body << endl; 
     }
     else
     {
@@ -557,11 +565,20 @@ void start(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *pid_ya
     mission.P2_target.push_back(mission.y_target_P2);
 
     //Point Relative to GPS waypoints
+    for ( int i=0; i<7 ; i+=2){
+   
+   /*
     waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[mission.count]);
     waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[mission.count]);
     waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[mission.count + 1]);
     waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[mission.count + 1]);
+    */
+    waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[i]);
+    waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[i]);
+    waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[i + 1]);
+    waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[i + 1]);
 
+    }
     //evaluate_control_point(from_image);
 
     mission.x_target = structure->obtain_xcoo_structure_world_frame()[mission.count];
@@ -634,11 +651,23 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
     mission.P2_target.push_back(mission.y_target_P2);
 
     //Point Relative to GPS waypoints
+    
     waypoints.GPS_P1_x = waypoints.waypoints_x_coo_world_frame[mission.count - 1];
     waypoints.GPS_P1_y = waypoints.waypoints_y_coo_world_frame[mission.count - 1];
     waypoints.GPS_P2_x = waypoints.waypoints_x_coo_world_frame[mission.count];
     waypoints.GPS_P2_y = waypoints.waypoints_y_coo_world_frame[mission.count];
 
+    cout << "|||||||||  waypoints.GPS_P1 = "<<  waypoints.GPS_P1_x  << " "<<  waypoints.GPS_P1_y <<endl;
+    cout << "|||||||||  waypoints.GPS_P2 = "<<  waypoints.GPS_P2_x  << " "<<  waypoints.GPS_P2_y <<endl;
+    
+   
+
+    /* 
+    waypoints.GPS_P1_x = structure->obtain_waypoints_x_coo_world_frame()[mission.count - 1];
+    waypoints.GPS_P1_y = structure->obtain_waypoints_x_coo_world_frame()[mission.count - 1];
+    waypoints.GPS_P2_x = structure->obtain_waypoints_x_coo_world_frame()[mission.count];
+    waypoints.GPS_P2_y = structure->obtain_waypoints_x_coo_world_frame()[mission.count];
+    */
     //ROtate COntrol observation points obtained from thermo and RGB camera to world frame
     /*Rotation_BF_to_GF_des_pos(drone.control_Thermo_point1_x, drone.control_Thermo_point1_y, drone.drone_Yaw);
   
@@ -716,7 +745,7 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         cout << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
         from_image = true;
         
-        if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 3) //3
+        if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 1.5) //3
         {
             //Resetto counter
             cout << "image control timer reset " << endl;
@@ -811,14 +840,19 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
     drone.drone_vel_msg.linear.x = pid_x->calculate(check_x_b, drone.drone_x_b);
     drone.drone_vel_msg.linear.y = pid_y->calculate(check_y_b, drone.drone_y_b);
 
-    if (mission.cartesian_distance_err < 0.2 && yaw_err < 0.1)
+    //if (mission.cartesian_distance_err < 0.2 && yaw_err < 0.1)
+    if (mission.cartesian_distance_err < 1.5 && yaw_err < 0.8)
     {
         mission.count = mission.count + 1; //Aggiorno target e waypoints con cui aggiornare anche KF
         drone.image_control_count = 100;   // inizializazzione valore grosso. --> Serve per aggiornare il filtro per un certo numero di iterazioni anche se nin sono state ricevute nuove osservazioni-- > utilizzal'ultima osservazione ricevuta
         mission.target_point = 2;
         mission.KF_Initialization = true;
         mission.structure_array_initialization = true; //necessaria per la corretta inizializazzione Kalman Filter
-        mission.state = 1;                             // Incomincia nuova navigazione vela
+        mission.state = 1;   
+        if ((panel_index +2 ) < 8 ){
+        panel_index = panel_index + 2;  
+        cout << "-------------------Panel index ="<< panel_index <<endl; 
+        }                       // Incomincia nuova navigazione vela
     }
 }
 
