@@ -57,7 +57,8 @@ class StructureImpl
 
 
     //Declaration of Private functions
-    void place_structure_start_end_point(float n_structure, float distance_between_structures,int configuration); //Vanno passati elementi che non sono parte della classe
+    //void place_structure_start_end_point(float n_structure, float distance_between_structures,int configuration); //Vanno passati elementi che non sono parte della classe
+    void place_structure_start_end_point(float n_strutture,float* x_waypoints, float* y_waypoints);
     void transformation_structure_center_from_body_to_world();
     void transformation_point_from_structure_to_world_frame();
     void transformation_GPS_point_from_GPS_to_world_frame();
@@ -69,14 +70,15 @@ class StructureImpl
     float P1_y;
     float P2_x;
     float P2_y;
-
+    //float orientation;
 
 
 
     //Class constructor, prende i termini dati in input alla class PID
     StructureImpl(Eigen::Vector2f structure_center_W, float theta, float size, float length);
 
-    void init(float n_structure, float distance_between_structures,int configuration);
+    //void init(float n_structure, float distance_between_structures,int configuration);
+    void init(float n_strutture,float* x_waypoints, float* y_waypoints);
     void pass_to_class_GPS_error(float GPS_gamma, float GPS_eta, float GPS_delta);
 
     //Function to obtain variables from class StructureImpl in main
@@ -87,6 +89,7 @@ class StructureImpl
     vector<float> obtain_xcoo_structure_world_frame();
     vector<float> obtain_ycoo_structure_world_frame();
     float obtain_theta();
+    //float obtain_orientation();
 
     //Destructor
      ~StructureImpl()
@@ -102,10 +105,15 @@ Structure::Structure(Eigen::Vector2f structure_center_W, float theta, float size
     structure_implementation = new StructureImpl(structure_center_W, theta, size, length);
 }
 
-//Function dcall
+/*//Function dcall
 void Structure::init(float n_structure, float distance_between_structures,int configuration)
 {
     return structure_implementation -> init(n_structure, distance_between_structures, configuration);
+}*/
+
+void Structure::init(float n_strutture, float* x_waypoints,float* y_waypoints)
+{
+    return structure_implementation -> init(n_strutture, x_waypoints, y_waypoints);
 }
 
 void Structure::pass_to_class_GPS_error(float GPS_gamma, float GPS_eta, float GPS_delta)
@@ -262,6 +270,7 @@ void StructureImpl::transformation_GPS_point_from_GPS_to_world_frame()
 
 }
 
+/*
 void StructureImpl::place_structure_start_end_point(float n_structure, float distance_between_structures,int configuration)
 {
      bool even = false; //false indica i punti da sinistra veros destra , true da destra verso sinistra
@@ -271,11 +280,7 @@ void StructureImpl::place_structure_start_end_point(float n_structure, float dis
 
     if (configuration == 1)
     {
-    /*      -----------
-     *      ------
-     *      ------
-     *      ----------
-     */
+   
       bool  flag_structure_disposition_1 = true;
     }
 
@@ -316,7 +321,7 @@ void StructureImpl::place_structure_start_end_point(float n_structure, float dis
                   * P2 ------- P1
                   * P1 ------- P2 <--- siamo qui
                   * P2 ------------- P1
-                  */
+                 
                   //Change position of P2: P1 --> P2
                  xcoo_structure_frame[xcoo_structure_frame.size() - 1] = xcenter_structure_frame[i];
                  ycoo_structure_frame[ycoo_structure_frame.size() - 1] = ycenter_structure_frame[i];
@@ -359,7 +364,7 @@ void StructureImpl::place_structure_start_end_point(float n_structure, float dis
                   * P2 ------- P1 <--- siamo qui
                   * P1 ------- P2
                   * P2 ------------- P1
-                  */
+                  
                   //Change position of P1 --> coincide con la metà del pannello, dove è collocato il frame
                  xcoo_structure_frame[xcoo_structure_frame.size() - 1] = xcenter_structure_frame[i];
                  ycoo_structure_frame[ycoo_structure_frame.size() - 1] = ycenter_structure_frame[i];
@@ -393,8 +398,55 @@ void StructureImpl::place_structure_start_end_point(float n_structure, float dis
     }
 
 }
+*/
 
-void StructureImpl::init(float n_structure, float distance_between_structures,int configuration)
+void StructureImpl::place_structure_start_end_point(float n_strutture,float* x_waypoints, float* y_waypoints)
+{
+    
+    //Place Panel point P1 and P2 before in Panel frame
+    for (int i = 0; i < n_strutture*2; i+=2)
+    {
+    
+        //Aggiungo punti in vettore da sinistra verso destra  P1 ---> P2
+            xcoo_structure_frame.push_back(x_waypoints[i]);
+            ycoo_structure_frame.push_back(y_waypoints[i]);
+
+        //Aggiungo Punti GPS in corriposndenza dei punti P1-->P2 nel frame structure ---> IL frame GPS è collocato in corripondenza del frame structure
+        //quindi sul centro del pannello 1
+            waypoints_x_coo_gps_frame.push_back(x_waypoints[i]);
+            waypoints_y_coo_gps_frame.push_back(y_waypoints[i]);
+
+            //Panel point trasformation to wolrd frame
+            transformation_point_from_structure_to_world_frame();
+
+        //GPS point trasformation to wolrd frame
+            transformation_GPS_point_from_GPS_to_world_frame(); //--> trasfromarzione da GPS frame a structure frame poi da structure frame a world frame
+
+            //P2
+            xcoo_structure_frame.push_back(x_waypoints[i+1]);
+            ycoo_structure_frame.push_back(y_waypoints[i+1]);
+
+            //P2 in gps frame
+            waypoints_x_coo_gps_frame.push_back(x_waypoints[i+1]);
+            waypoints_y_coo_gps_frame.push_back(y_waypoints[i+1]);
+
+        //even = true;
+        
+
+        // cout <<"P1 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
+        // cout <<"P1 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
+        // cout <<"P2 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
+        // cout <<"P2 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
+
+        //Transformation of P1 P2 from structure body frame to world frame
+        transformation_point_from_structure_to_world_frame();
+
+        transformation_GPS_point_from_GPS_to_world_frame();
+    }    
+    
+}
+
+/*void StructureImpl::init(float n_structure, float distance_between_structures,int configuration)
 {
 
 
@@ -417,6 +469,29 @@ void StructureImpl::init(float n_structure, float distance_between_structures,in
     //Place Point Start and end ( P1 and P2 ) for each structure
     place_structure_start_end_point(n_structure, distance_between_structures, configuration);
 
+
+}*/
+
+void StructureImpl::init(float n_strutture, float* x_waypoints, float* y_waypoints){
+
+    cout << "#########################################################################" << endl;
+    //Insert centers of the structure in the map
+     xcenter_structure_world_frame.push_back( _structure_center_W[0]);
+     ycenter_structure_world_frame.push_back( _structure_center_W[1]);
+
+
+    //Define centers in structure frame coordinates --> i want structure align algong the same x coo and different y coo
+    for (float i = 0; i < n_strutture; i++)
+    {
+        xcenter_structure_frame.push_back(0.0);
+        ycenter_structure_frame.push_back(- i * 2.2); //Panels aligned along axe y in negative direction
+        cout<< "x center structure "<< i + 1 <<"frame : " << xcenter_structure_frame[i] << endl;
+        cout<< "y center structure "<< i + 1 <<"frame : " << ycenter_structure_frame[i] << endl;
+
+        //Trasformation from structure frame to world frame.. The center of structure 1 in world frame is located in main
+        transformation_structure_center_from_body_to_world();
+    }
+    place_structure_start_end_point(n_strutture, x_waypoints, y_waypoints);
 
 }
 
