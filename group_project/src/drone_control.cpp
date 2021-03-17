@@ -53,7 +53,9 @@ Se avete dubbi contattatemi pure a : luca.morando@edu.unige.it
 unsigned int sleep(unsigned int seconds);
 
 unsigned int panel_index = 0;
-float old_orientation = 0.0;
+float orientations[4];
+
+
 
 //Struttura relativa alla gestione dei punti di waypoints
 struct Waypoint_GPS
@@ -559,7 +561,7 @@ void start(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *pid_ya
 
     mission.x_target_P2 = structure->obtain_xcoo_structure_world_frame()[mission.count + 1];
     mission.y_target_P2 = structure->obtain_ycoo_structure_world_frame()[mission.count + 1];
-    mission.orientation = atan2(mission.y_target_P2 - mission.y_target_P1, mission.x_target_P2 - mission.x_target_P1); 
+   // mission.orientation = atan2(mission.y_target_P2 - mission.y_target_P1, mission.x_target_P2 - mission.x_target_P1); 
     cout << "P1_x:" << mission.x_target_P1 << endl;
     cout << "P1_y:" << mission.y_target_P1 << endl;
     cout << "P2_x:" << mission.x_target_P2 << endl;
@@ -642,6 +644,8 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
 
     mission.x_target_P2 = structure->obtain_xcoo_structure_world_frame()[mission.count];
     mission.y_target_P2 = structure->obtain_ycoo_structure_world_frame()[mission.count];
+
+   // mission.orientation = atan2(mission.y_target_P2 - mission.y_target_P1, mission.x_target_P2 - mission.x_target_P1); 
 
     cout << "P1_x:" << mission.x_target_P1 << endl;
     cout << "P1_y:" << mission.y_target_P1 << endl;
@@ -814,8 +818,13 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
       
         from_image = false;
         //ROtating Yaw of 180 degree
-        drone.yaw_des = drone.drone_Yaw + M_PI; //(mission.orientation - old_orientation); //ROtate drone 
-
+            int index_or = panel_index/2;
+            if(index_or < 4){
+             float variance = orientations[index_or+1] - orientations[index_or]; 
+             cout << "******************var = "<< variance << " index"<< index_or<<endl;
+             drone.yaw_des = drone.drone_Yaw - variance; //(mission.orientation - old_orientation); //ROtate drone 
+            }
+       
         mission.state = 2;                      //Cambio di array
         mission.count = mission.count + 1;
         cout << "From Navigation mission.count incremented :" << mission.count << endl;
@@ -833,9 +842,8 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
 
     mission.x_target_P2 = structure->obtain_xcoo_structure_world_frame()[mission.count];
     mission.y_target_P2 = structure->obtain_ycoo_structure_world_frame()[mission.count];
-    mission.orientation = atan2(mission.y_target_P2 - mission.y_target_P1, mission.x_target_P2 - mission.x_target_P1); //orientamento struttura 2
-    cout << "new mission orientation = " << mission.orientation << endl;
-    drone.yaw_des = drone.drone_Yaw + (mission.orientation - old_orientation); //ROtate drone 
+    
+    
     //old_orientation = mission.orientation;
     mission.cartesian_distance_err = sqrt(pow(mission.x_target_P2 - drone.drone_x, 2) + pow(mission.y_target_P2 - drone.drone_y, 2));
     cout << "mission.cartesian_distance_err: " << mission.cartesian_distance_err << endl;
@@ -859,8 +867,6 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
         mission.KF_Initialization = true;
         mission.structure_array_initialization = true; //necessaria per la corretta inizializazzione Kalman Filter
         mission.state = 1;   
-        old_orientation = mission.orientation;
-
         if ((panel_index +2 ) < 8 ){
         panel_index = panel_index + 2;  
         cout << "-------------------Panel index ="<< panel_index <<endl; 
@@ -906,7 +912,7 @@ int main(int argc, char **argv)
     bool flag_even = false;
     bool flag_end_point = false;
 
-    //PARAMETRS
+    //PARAMETRs 
     float n_structure = 4.0;
     float distance_between_structure = 2.2; //1.84;
     int configuration = 0;                  //1 se si vuole la configurazione con panneli a ferro di cavallo
@@ -929,9 +935,16 @@ int main(int argc, char **argv)
 
     //Obtain GPS error to define GPS waypoints for point P1 P2 of start and end
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
-    float x_waypoints [8] = {1.37021, 12.3698, 12.389, 1.38941, 12.4082, 12.4274, 1.4278};
+    float x_waypoints [8] = {1.37021, 12.3698, 12.389, 1.38941,1.40861 ,12.4082, 12.4274, 1.4278};
     float y_waypoints [8] = {2.252, 2.348, 0.14808, 0.05208, -2.14783, -2.05184, -4.25175, -4.34774};
     float n_strutture = 4.0;
+
+    
+    for (int i=0; i<7 ; i+=2){
+       float orientation = atan2(y_waypoints[i+1] - y_waypoints[i], x_waypoints[i+1] - x_waypoints[i]);//-M_PI; 
+        orientations[i/2] = orientation;
+    }
+    
     //Place structure centers and Start P1 and end P2 in map for each structure
     
     structure.init(n_strutture, x_waypoints, y_waypoints);
@@ -961,6 +974,8 @@ int main(int argc, char **argv)
         waypoints.waypoints_x_coo_gps_frame.push_back(structure.obtain_waypoints_x_coo_gps_frame()[i]);
         waypoints.waypoints_y_coo_gps_frame.push_back(structure.obtain_waypoints_y_coo_gps_frame()[i]);
     }
+
+    //for (int i=0)
     
     //Define Gains Controller
     float Kp_z = 1.5;
