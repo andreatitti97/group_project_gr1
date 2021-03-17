@@ -28,7 +28,7 @@ class Structure
     //Dichiarazione funzioni implementate nel file Structure.cpp
     //void init(float n_structure, float distance_between_structure,int configuration);
 
-    void init(float n_strutture,float* x_waypoints, float* y_waypoints);
+    void init(float n_strutture,float* x_waypoints, float* y_waypoints, float* orientations);
     
     //Function that pass variables from class Structure to StructureImpl
     void pass_to_class_GPS_error(float GPS_gamma, float GPS_eta, float GPS_delta);

@@ -59,7 +59,7 @@ class StructureImpl
     //Declaration of Private functions
     //void place_structure_start_end_point(float n_structure, float distance_between_structures,int configuration); //Vanno passati elementi che non sono parte della classe
     void place_structure_start_end_point(float n_strutture,float* x_waypoints, float* y_waypoints);
-    void transformation_structure_center_from_body_to_world();
+    void transformation_structure_center_from_body_to_world(float orientation);
     void transformation_point_from_structure_to_world_frame();
     void transformation_GPS_point_from_GPS_to_world_frame();
 
@@ -78,7 +78,7 @@ class StructureImpl
     StructureImpl(Eigen::Vector2f structure_center_W, float theta, float size, float length);
 
     //void init(float n_structure, float distance_between_structures,int configuration);
-    void init(float n_strutture,float* x_waypoints, float* y_waypoints);
+    void init(float n_strutture,float* x_waypoints, float* y_waypoints, float* orientations);
     void pass_to_class_GPS_error(float GPS_gamma, float GPS_eta, float GPS_delta);
 
     //Function to obtain variables from class StructureImpl in main
@@ -111,9 +111,9 @@ void Structure::init(float n_structure, float distance_between_structures,int co
     return structure_implementation -> init(n_structure, distance_between_structures, configuration);
 }*/
 
-void Structure::init(float n_strutture, float* x_waypoints,float* y_waypoints)
+void Structure::init(float n_strutture, float* x_waypoints,float* y_waypoints, float* orientations)
 {
-    return structure_implementation -> init(n_strutture, x_waypoints, y_waypoints);
+    return structure_implementation -> init(n_strutture, x_waypoints, y_waypoints, orientations);
 }
 
 void Structure::pass_to_class_GPS_error(float GPS_gamma, float GPS_eta, float GPS_delta)
@@ -215,7 +215,7 @@ void  StructureImpl::transformation_point_from_structure_to_world_frame()
 
 
 //Se la funzione non è definita nella classe le variabili devono essere passate
-void StructureImpl::transformation_structure_center_from_body_to_world()
+void StructureImpl::transformation_structure_center_from_body_to_world(float orientation)
 {
      //Transformation structure centers from body frame (structure body frame) to World frame
     //The angle theta of structure orientation is set in main
@@ -225,8 +225,8 @@ void StructureImpl::transformation_structure_center_from_body_to_world()
     Eigen::Vector3f structure_center_vector_in_structure_frame(xcenter_structure_frame[size_v - 1],ycenter_structure_frame[size_v - 1], 1);
 
     // float structure_center_vector_in_structure_frame[3] = {structure -> xcenter_structure_frame[size_v - 1],structure -> ycenter_structure_frame[size_v - 1], 1}; //Definisco vettore waypoint in gps_frame da moltiplicare per matrice T
-    T << cos(_theta), -sin(_theta), xcenter_structure_world_frame[0],
-    sin(_theta), cos(_theta), ycenter_structure_world_frame[0],
+    T << cos(orientation), -sin(orientation), xcenter_structure_world_frame[0],
+    sin(orientation), cos(orientation), ycenter_structure_world_frame[0],
     0, 0,1;
 
     coo_w = T*structure_center_vector_in_structure_frame;
@@ -472,24 +472,23 @@ void StructureImpl::place_structure_start_end_point(float n_strutture,float* x_w
 
 }*/
 
-void StructureImpl::init(float n_strutture, float* x_waypoints, float* y_waypoints){
+void StructureImpl::init(float n_strutture, float* x_waypoints, float* y_waypoints,float* orientations){
 
-    cout << "#########################################################################" << endl;
     //Insert centers of the structure in the map
      xcenter_structure_world_frame.push_back( _structure_center_W[0]);
      ycenter_structure_world_frame.push_back( _structure_center_W[1]);
 
 
     //Define centers in structure frame coordinates --> i want structure align algong the same x coo and different y coo
-    for (float i = 0; i < n_strutture; i++)
+    for (int i = 0; i < n_strutture*2; i+=2)
     {
-        xcenter_structure_frame.push_back(0.0);
-        ycenter_structure_frame.push_back(- i * 2.2); //Panels aligned along axe y in negative direction
+        xcenter_structure_frame.push_back((x_waypoints[i+1]-x_waypoints[i])/2);
+        ycenter_structure_frame.push_back((y_waypoints[i+1]-y_waypoints[i])/2); //Panels aligned along axe y in negative direction
         cout<< "x center structure "<< i + 1 <<"frame : " << xcenter_structure_frame[i] << endl;
         cout<< "y center structure "<< i + 1 <<"frame : " << ycenter_structure_frame[i] << endl;
 
         //Trasformation from structure frame to world frame.. The center of structure 1 in world frame is located in main
-        transformation_structure_center_from_body_to_world();
+        transformation_structure_center_from_body_to_world(orientations[i/2]);
     }
     place_structure_start_end_point(n_strutture, x_waypoints, y_waypoints);
 

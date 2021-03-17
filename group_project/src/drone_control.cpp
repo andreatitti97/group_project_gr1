@@ -928,15 +928,15 @@ int main(int argc, char **argv)
     Eigen::Vector2f structure_center_W(0, 0); //6.37 , 2
     float theta = 0;                             //45.0 * M_PI/180;
     float size = 1.0;
-    float length = 11; //11
+    float length = 12; //11
 
     //Create a vector of structure for each structure
     Structure structure(structure_center_W, theta, size, length);
 
     //Obtain GPS error to define GPS waypoints for point P1 P2 of start and end
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
-    float x_waypoints [8] = {1.37021, 12.3698, 12.389, 1.38941,1.40861 ,12.4082, 12.4274, 1.4278};
-    float y_waypoints [8] = {2.252, 2.348, 0.14808, 0.05208, -2.14783, -2.05184, -4.25175, -4.34774};
+    float x_waypoints [8] = {0, 12, 12.389, 22.39,1.40861 ,12.4082, 12.4274, 1.4278};
+    float y_waypoints [8] = {2, 2, 2, -4, -2.14783, -2.05184, -4.25175, -4.34774};
     float n_strutture = 4.0;
 
     
@@ -947,7 +947,7 @@ int main(int argc, char **argv)
     
     //Place structure centers and Start P1 and end P2 in map for each structure
     
-    structure.init(n_strutture, x_waypoints, y_waypoints);
+    structure.init(n_strutture, x_waypoints, y_waypoints, orientations);
      
 
     //Write structure points in world frame

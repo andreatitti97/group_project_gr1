@@ -9,7 +9,7 @@
   <!-- Empty World: ~/worlds_backup/empty.world
        Ardrone World: ~/worlds/ardrone_testworld.world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/block_testworld2.world"/>
+    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/curve_testworld.world"/>
   </include>
 
   <!-- Spawn simulated quadrotor uav  -->
@@ -37,7 +37,7 @@
   <node name="spawn_robot_urdf_RGB" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description_RGB -model camera_box_RGB"/> 
  -->
  <include file="$(find box_urdf)/launch/spawn_camera_box_model.launch" pass_all_args="true"/>  
-<!-- Drone navigation -->
+ <!--Drone navigation -->
  <include file="$(find group_project)/launch/drone_nav.launch" pass_all_args="true" /> 
 
 </launch>
