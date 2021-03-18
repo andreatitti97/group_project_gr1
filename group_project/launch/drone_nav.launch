@@ -4,5 +4,8 @@
 <launch>
   	    <node name="drone_control" pkg="group_project" type="drone_control" output="screen" launch-prefix="gnome-terminal --command" />
 	<!-- <node name = "OpenCV1" pkg="group_project" type="ros_simulation_data.py" output="screen" launch-prefix="xterm -e"/> -->
-        <!-- <node name = "OpenCV" pkg="group_project" type="RGB_visual_ros_sim.py" output="screen" launch-prefix="gnome-terminal command"/> -->
+        
+		<arg name="node_start_delay" default="20.0" />
+		<node name = "OpenCV" pkg="group_project" type="RGB_visual_ros_sim.py" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@'; gnome-terminal --command "/> 
+ 
 </launch>

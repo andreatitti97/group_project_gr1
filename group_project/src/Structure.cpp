@@ -400,6 +400,7 @@ void StructureImpl::place_structure_start_end_point(float n_structure, float dis
 }
 */
 
+/* Function used to generate panels from waypoints */
 void StructureImpl::place_structure_start_end_point(float n_strutture,float* x_waypoints, float* y_waypoints)
 {
     
@@ -430,13 +431,7 @@ void StructureImpl::place_structure_start_end_point(float n_strutture,float* x_w
             waypoints_x_coo_gps_frame.push_back(x_waypoints[i+1]);
             waypoints_y_coo_gps_frame.push_back(y_waypoints[i+1]);
 
-        //even = true;
-        
-
-        // cout <<"P1 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
-        // cout <<"P1 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 2]<<endl;
-        // cout <<"P2 x structure "<< i+1<<"in structure frame: "<< xcoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
-        // cout <<"P2 y structure "<< i+1<<"in structure frame: "<< ycoo_structure_frame[xcoo_structure_frame.size() - 1]<<endl;
+       
 
         //Transformation of P1 P2 from structure body frame to world frame
         transformation_point_from_structure_to_world_frame();
@@ -472,6 +467,7 @@ void StructureImpl::place_structure_start_end_point(float n_strutture,float* x_w
 
 }*/
 
+/* new init function  */
 void StructureImpl::init(float n_strutture, float* x_waypoints, float* y_waypoints,float* orientations){
 
     //Insert centers of the structure in the map
@@ -484,8 +480,7 @@ void StructureImpl::init(float n_strutture, float* x_waypoints, float* y_waypoin
     {
         xcenter_structure_frame.push_back((x_waypoints[i+1]-x_waypoints[i])/2);
         ycenter_structure_frame.push_back((y_waypoints[i+1]-y_waypoints[i])/2); //Panels aligned along axe y in negative direction
-        cout<< "x center structure "<< i + 1 <<"frame : " << xcenter_structure_frame[i] << endl;
-        cout<< "y center structure "<< i + 1 <<"frame : " << ycenter_structure_frame[i] << endl;
+       
 
         //Trasformation from structure frame to world frame.. The center of structure 1 in world frame is located in main
        // transformation_structure_center_from_body_to_world(orientations[i/2]);

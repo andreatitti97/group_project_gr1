@@ -22,6 +22,8 @@
 
 using namespace std;
 #define N 2
+#define N_structure 3
+
 
 
 
@@ -51,10 +53,9 @@ Se avete dubbi contattatemi pure a : luca.morando@edu.unige.it
 */
 
 unsigned int sleep(unsigned int seconds);
-
-unsigned int panel_index = 0;
-float orientations[4];
-
+unsigned int panel_index = 0; // index of the current panel 
+float orientations[N_structure]; //yaws of the panels
+int a_size = 2*N_structure ;
 
 
 //Struttura relativa alla gestione dei punti di waypoints
@@ -364,15 +365,9 @@ void evaluate_control_point(bool from_image)
     float y_target_P1_body = 0.0;
     float x_target_P2_body = 0.0;
     float y_target_P2_body = 0.0;
-    cout <<" °°°°°°°°°°°°°°°° Panel Index = " << panel_index << endl;
-    int i = 0;
-    for (i = 0 ; i<8 ; i+=2){
-    cout <<"############### waypoint P1 " << waypoints.GPS_P1_waypoint[i]<< " " << waypoints.GPS_P1_waypoint[i+1]<<endl;
-    cout <<"############### waypoint P2 " << waypoints.GPS_P2_waypoint[i]<< " " << waypoints.GPS_P2_waypoint[i+1]<<endl;
-    }
 
-    cout << "»»»»»»»» Evaluate from GPS P1: " << waypoints.GPS_P1_waypoint[panel_index] << " , " << waypoints.GPS_P1_waypoint[panel_index +1] << endl;
-    cout << "»»»»»»»» Evaluate from GPS P2: " << waypoints.GPS_P2_waypoint[panel_index] << " , " << waypoints.GPS_P2_waypoint[panel_index +1] << endl;
+    cout <<"################# Panel Index = " << panel_index << endl;
+   
     //Rotate Point P1 in drone body frame
     Rotation_GF_to_BF_des_pos(waypoints.GPS_P1_waypoint[panel_index], waypoints.GPS_P1_waypoint[panel_index+1], drone.drone_Yaw);
     x_target_P1_body = check_x_b;
@@ -386,12 +381,11 @@ void evaluate_control_point(bool from_image)
     if (from_image == false)
     {
 
-        cout << "FOllowing GPS line!" << endl;
-
+        cout << "Following GPS line!" << endl;
         //Evaluate parameters a, b c of the line equation ax^b + by^ + c = 0
         a = ((y_target_P2_body - y_target_P1_body) / (x_target_P2_body - x_target_P1_body));
         c = ((-(a)*x_target_P1_body) + y_target_P1_body);
-        cout << "TEST x_target_p1 = " << x_target_P1_body << "TEST y_target_p1 = " << y_target_P1_body << endl; 
+        //cout << "TEST x_target_p1 = " << x_target_P1_body << "TEST y_target_p1 = " << y_target_P1_body << endl; 
     }
     else
     {
@@ -429,7 +423,7 @@ void evaluate_control_point(bool from_image)
             rot_Vy = Vx_norm[0] * sin(M_PI) + Vx_norm[1] * cos(M_PI);
             Vx_norm[0] = rot_Vx;
             Vx_norm[1] = rot_Vy;
-            // cout << "sono qui" << endl;
+           
         }
         else
         {
@@ -445,7 +439,7 @@ void evaluate_control_point(bool from_image)
             rot_Vy = Vx_norm[0] * sin(M_PI) + Vx_norm[1] * cos(M_PI);
             Vx_norm[0] = rot_Vx;
             Vx_norm[1] = rot_Vy;
-            //  cout<< "sono quiiiiii"<< endl;
+            
         }
         else
         {
@@ -474,8 +468,8 @@ void evaluate_control_point(bool from_image)
     float b1 = -1;
     float c1 = 0;
 
-    //Find equation parameters of the line r2 passing trhoug vector Vy. Line r2 is perpendicular  to line r but passing throung origin --> coeff angolare è
-    float a2 = -1 / a; //Vy_norm[1]/Vy_norm[0]; era 1/a
+    //Find equation parameters of the line r2 passing through vector Vy. Line r2 is perpendicular  to line r but passing throung origin --> coeff angolare è
+    float a2 = -1 / a; //Vy_norm[1]/Vy_norm[0]; 
     float b2 = -1;
     float c2 = 0;
 
@@ -564,7 +558,7 @@ void start(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *pid_ya
 
     mission.x_target_P2 = structure->obtain_xcoo_structure_world_frame()[mission.count + 1];
     mission.y_target_P2 = structure->obtain_ycoo_structure_world_frame()[mission.count + 1];
-   // mission.orientation = atan2(mission.y_target_P2 - mission.y_target_P1, mission.x_target_P2 - mission.x_target_P1); 
+   
     cout << "P1_x:" << mission.x_target_P1 << endl;
     cout << "P1_y:" << mission.y_target_P1 << endl;
     cout << "P2_x:" << mission.x_target_P2 << endl;
@@ -575,14 +569,8 @@ void start(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *pid_ya
     mission.P2_target.push_back(mission.y_target_P2);
 
     //Point Relative to GPS waypoints
-    for ( int i=0; i<7 ; i+=2){
+    for ( int i=0; i<a_size ; i+=2){
    
-   /*
-    waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[mission.count]);
-    waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[mission.count]);
-    waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[mission.count + 1]);
-    waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[mission.count + 1]);
-    */
     waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[i]);
     waypoints.GPS_P1_waypoint.push_back(waypoints.waypoints_y_coo_world_frame[i]);
     waypoints.GPS_P2_waypoint.push_back(waypoints.waypoints_x_coo_world_frame[i + 1]);
@@ -648,8 +636,7 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
     mission.x_target_P2 = structure->obtain_xcoo_structure_world_frame()[mission.count];
     mission.y_target_P2 = structure->obtain_ycoo_structure_world_frame()[mission.count];
 
-   // mission.orientation = atan2(mission.y_target_P2 - mission.y_target_P1, mission.x_target_P2 - mission.x_target_P1); 
-
+  
     cout << "P1_x:" << mission.x_target_P1 << endl;
     cout << "P1_y:" << mission.y_target_P1 << endl;
     cout << "P2_x:" << mission.x_target_P2 << endl;
@@ -669,17 +656,7 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
     waypoints.GPS_P2_x = waypoints.waypoints_x_coo_world_frame[mission.count];
     waypoints.GPS_P2_y = waypoints.waypoints_y_coo_world_frame[mission.count];
 
-    cout << "|||||||||  waypoints.GPS_P1 = "<<  waypoints.GPS_P1_x  << " "<<  waypoints.GPS_P1_y <<endl;
-    cout << "|||||||||  waypoints.GPS_P2 = "<<  waypoints.GPS_P2_x  << " "<<  waypoints.GPS_P2_y <<endl;
-    
-   
 
-    /* 
-    waypoints.GPS_P1_x = structure->obtain_waypoints_x_coo_world_frame()[mission.count - 1];
-    waypoints.GPS_P1_y = structure->obtain_waypoints_x_coo_world_frame()[mission.count - 1];
-    waypoints.GPS_P2_x = structure->obtain_waypoints_x_coo_world_frame()[mission.count];
-    waypoints.GPS_P2_y = structure->obtain_waypoints_x_coo_world_frame()[mission.count];
-    */
     //ROtate COntrol observation points obtained from thermo and RGB camera to world frame
     /*Rotation_BF_to_GF_des_pos(drone.control_Thermo_point1_x, drone.control_Thermo_point1_y, drone.drone_Yaw);
   
@@ -770,18 +747,16 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         //Se non ci sono piu nuove osservazioni anche per oltre il numero concesso di osservazioni
         //torno alla navigazione via GPS
         cout << "from_image = false -> No image flag, high error, image control counter > 50" << endl;
-        from_image = false; // TestAAA
+        from_image = false; 
     }
 
     //Evaluate control points to follow the GPS or estimated control line
     evaluate_control_point(from_image);
-    cout << "::::::::::::::::::Drone yaw desired : " << drone.yaw_des << endl;
     drone.drone_vel_msg.angular.z = pid_yaw->position_control_knowing_velocity(abs(drone.yaw_des), abs(drone.drone_Yaw), 0, drone.drone_ang_vel_z); //ci andrebbe yaw
     if (drone.drone_Yaw < 0)
     {
         drone.drone_vel_msg.angular.z = -1 * drone.drone_vel_msg.angular.z;
     }
-cout << " :::::::::::::: z-velocity :" << drone.drone_vel_msg.angular.z << endl;
     // PID control on velocity defined on body frame
     // cout << "PID control based on target:" << drone.x_target << "," << drone.y_target << endl; 
     drone.drone_vel_msg.linear.x = pid_x->calculate(drone.x_target, drone.drone_x_b);
@@ -816,22 +791,20 @@ cout << " :::::::::::::: z-velocity :" << drone.drone_vel_msg.angular.z << endl;
         cout << "from_image false since error GPS high" << endl;
     }
 
-    cout << "++++++++++++++ actual yaw of the drone: "<< drone.drone_Yaw << endl; 
+   // cout << "++++++++++++++ actual yaw of the drone: "<< drone.drone_Yaw << endl; 
+
     //Passaggio alla mission.state 2--> Cambio di vela
     if (mission.cartesian_distance_err < 1.5)
     {
       
         from_image = false;
-        //ROtating Yaw of 180 degree
+        //Rotating Yaw 
             int index_or = panel_index/2;
             if(index_or < 4){
-             float variance = orientations[index_or+1] - orientations[index_or]; 
-             cout << "******************var = "<< variance << " index"<< index_or<<endl;
-             drone.yaw_des = drone.drone_Yaw + variance; //(mission.orientation - old_orientation); //ROtate drone 
+             float variance = orientations[index_or+1] - orientations[index_or]; // difference between the orientation of two consecutive panels
+             drone.yaw_des = drone.drone_Yaw + variance;  //Rotate drone 
             }
-          
-        
-        //drone.yaw_des = -M_PI/6; //30 gradi 
+           
        
         mission.state = 2;                      //Cambio di array
         mission.count = mission.count + 1;
@@ -855,7 +828,7 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
     //old_orientation = mission.orientation;
     mission.cartesian_distance_err = sqrt(pow(mission.x_target_P2 - drone.drone_x, 2) + pow(mission.y_target_P2 - drone.drone_y, 2));
     cout << "mission.cartesian_distance_err: " << mission.cartesian_distance_err << endl;
-    //cout << "mission.x_target_P2:  " << mission.x_target_P2 << "mission.y_target_P2:  " << mission.y_target_P2 << endl;
+   
     drone.drone_vel_msg.angular.z = pid_yaw->position_control_knowing_velocity(drone.yaw_des, abs(drone.drone_Yaw), 0, drone.drone_ang_vel_z);
     cout << "YAW DES: " << drone.yaw_des << " drone.drone_Yaw: " << abs(drone.drone_Yaw) << endl;
     
@@ -866,7 +839,6 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
     drone.drone_vel_msg.linear.x = pid_x->calculate(check_x_b, drone.drone_x_b);
     drone.drone_vel_msg.linear.y = pid_y->calculate(check_y_b, drone.drone_y_b);
 
-    //if (mission.cartesian_distance_err < 0.2 && yaw_err < 0.1)
     if (mission.cartesian_distance_err < 0.5 && yaw_err < 0.1)
     {
         mission.count = mission.count + 1; //Aggiorno target e waypoints con cui aggiornare anche KF
@@ -877,7 +849,7 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
         mission.state = 1;   
         if ((panel_index +2 ) < 8 ){
         panel_index = panel_index + 2;  
-        cout << "-------------------Panel index ="<< panel_index <<endl; 
+       
         }                       // Incomincia nuova navigazione vela
     }
 }
@@ -920,8 +892,7 @@ int main(int argc, char **argv)
     bool flag_even = false;
     bool flag_end_point = false;
 
-    //PARAMETRs 
-    float n_structure = 4.0;
+    //PARAMETERS
     float distance_between_structure = 2.2; //1.84;
     int configuration = 0;                  //1 se si vuole la configurazione con panneli a ferro di cavallo
 
@@ -936,7 +907,7 @@ int main(int argc, char **argv)
     Eigen::Vector2f structure_center_W(0, 0); //6.37 , 2
     float theta = 0;                             //45.0 * M_PI/180;
     float size = 1.0;
-    float length = 12; //11
+    float length = 12; 
 
     //Create a vector of structure for each structure
     Structure structure(structure_center_W, theta, size, length);
@@ -945,19 +916,18 @@ int main(int argc, char **argv)
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
     //float x_waypoints [8] = {0, 12, 12.389, 22.39,22.39 ,28.39, 12.4274, 1.4278};
     //float y_waypoints [8] = {2, 2, 2, -4, -4, -10.41, -4.25175, -4.34774};
-    float x_waypoints [8] = {0, 6, 6.3, 11.50,11.80 ,14.5, 12.4274, 1.4278};
-    float y_waypoints [8] = {2, 2, 2.3, -1.3,-1.6 ,-6.5, 12.4274, 1.4278};
-    float n_strutture = 4.0;
+    float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
+    float y_waypoints [a_size] = {2, 2, 2.3, -1.3,-1.6 ,-6.5};
 
     
-    for (int i=0; i<7 ; i+=2){
+    for (int i=0; i<a_size ; i+=2){
        float orientation = atan2(y_waypoints[i+1] - y_waypoints[i], x_waypoints[i+1] - x_waypoints[i]);//-M_PI; 
         orientations[i/2] = orientation;
     }
     
     //Place structure centers and Start P1 and end P2 in map for each structure
     
-    structure.init(n_strutture, x_waypoints, y_waypoints, orientations);
+    structure.init(N_structure, x_waypoints, y_waypoints, orientations);
      
 
     //Write structure points in world frame
@@ -985,7 +955,6 @@ int main(int argc, char **argv)
         waypoints.waypoints_y_coo_gps_frame.push_back(structure.obtain_waypoints_y_coo_gps_frame()[i]);
     }
 
-    //for (int i=0)
     
     //Define Gains Controller
     float Kp_z = 1.5;
@@ -1125,7 +1094,7 @@ int main(int argc, char **argv)
             drone.drone_vel_msg.linear.z = pid_z.position_control_knowing_velocity(drone.z_des, drone.drone_z, 0, drone.drone_lin_vel_z);
             drone.yaw_des = atan2(structure.obtain_ycoo_structure_world_frame()[count + 1], structure.obtain_xcoo_structure_world_frame()[count + 1]); //Define yaw des to poiunt to the first P1 start structure
             drone.drone_vel_msg.angular.z = pid_yaw.position_control_knowing_velocity(drone.yaw_des, drone.drone_Yaw, 0, drone.drone_ang_vel_z);       //Yaw PID control
-            //cout<<"drone.drone_vel_msg.linear.z: "<< drone.drone_vel_msg.linear.z<< endl;
+
             // publish the message
             vel.publish(drone.drone_vel_msg);
 

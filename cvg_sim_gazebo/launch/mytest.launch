@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
 <launch>
 
-  <!-- Spawn box model -->
-  <!-- <arg name="wname" default="worlds/block_testworld.world"/>
-  <arg name="world_name" value="$(find cvg_sim_gazebo)/$(arg wname)"/> -->
-
-  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched  -->
-  <!-- Empty World: ~/worlds_backup/empty.world
-       Ardrone World: ~/worlds/ardrone_testworld.world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/curve3_short_testworld.world"/>
   </include>
@@ -18,26 +11,10 @@
     <arg name="model" value="$(find cvg_sim_gazebo)/urdf/quadrotor_sensors.urdf.xacro"/> 
   </include>  
 
-
-  <!--Spawn RGB Camera -->
-  <!-- <include file="$(find cvg_sim_gazebo)/launch/spawn_camera_RGB1.launch" >
-    <arg name="model_camera" value="$(find cvg_sim_gazebo)/urdf/RGB_Camera.urdf.xacro"/> 
-  </include> -->
-
-  <!-- Launch Luca -->
-  <!--<include file="$(find box_urdf)/launch/spawn_camera_box_model.launch">
-    <arg name="robot_description" value="$(find box_urdf)/urdf/camera_box.urdf"/>
-    <arg name="robot_description_RGB" value="$(find box_urdf)/urdf/camera_box_RGB.urdf"/>
-  </include> -->
-
-<!--  <param name="robot_description"  command="cat '$(find box_urdf)/urdf/camera_box.urdf'"/> 
-  <node name="spawn_robot_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model camera_box"/> 
-
-  <param name="robot_description_RGB"  command="cat '$(find box_urdf)/urdf/camera_box_RGB.urdf'"/>
-  <node name="spawn_robot_urdf_RGB" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description_RGB -model camera_box_RGB"/> 
- -->
+<!-- camera box-->
 <include file="$(find box_urdf)/launch/spawn_camera_box_model.launch" pass_all_args="true"/>
  <!--Drone navigation -->
 <include file="$(find group_project)/launch/drone_nav.launch" pass_all_args="true" /> 
+
 
 </launch>
