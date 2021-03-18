@@ -914,11 +914,20 @@ int main(int argc, char **argv)
 
     //Obtain GPS error to define GPS waypoints for point P1 P2 of start and end
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
-    //float x_waypoints [8] = {0, 12, 12.389, 22.39,22.39 ,28.39, 12.4274, 1.4278};
-    //float y_waypoints [8] = {2, 2, 2, -4, -4, -10.41, -4.25175, -4.34774};
+
+    // waypoints for block_testworld2
+    /*float x_waypoints [a_size] = {1.37, 12.36, 12.38, 1.38 ,1.40 ,12.40, 12.42, 1.42};
+    float y_waypoints [a_size] = {2.25, 2.34, 0.14, 0.05, -2.14, -2.05, -4.25, -4.34}; */
+
+    // waypoints for curve_short
+    /*float x_waypoints [a_size] = {0, 12, 12.389, 22.39,22.39 ,28.39};
+    float y_waypoints [a_size] = {2, 2, 2, -4, -4, -10.41}; */
+
+
+    // waypoints for curve3_short
     float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
     float y_waypoints [a_size] = {2, 2, 2.3, -1.3,-1.6 ,-6.5};
-
+    
     
     for (int i=0; i<a_size ; i+=2){
        float orientation = atan2(y_waypoints[i+1] - y_waypoints[i], x_waypoints[i+1] - x_waypoints[i]);//-M_PI; 
