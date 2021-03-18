@@ -370,6 +370,9 @@ void evaluate_control_point(bool from_image)
     cout <<"############### waypoint P1 " << waypoints.GPS_P1_waypoint[i]<< " " << waypoints.GPS_P1_waypoint[i+1]<<endl;
     cout <<"############### waypoint P2 " << waypoints.GPS_P2_waypoint[i]<< " " << waypoints.GPS_P2_waypoint[i+1]<<endl;
     }
+
+    cout << "»»»»»»»» Evaluate from GPS P1: " << waypoints.GPS_P1_waypoint[panel_index] << " , " << waypoints.GPS_P1_waypoint[panel_index +1] << endl;
+    cout << "»»»»»»»» Evaluate from GPS P2: " << waypoints.GPS_P2_waypoint[panel_index] << " , " << waypoints.GPS_P2_waypoint[panel_index +1] << endl;
     //Rotate Point P1 in drone body frame
     Rotation_GF_to_BF_des_pos(waypoints.GPS_P1_waypoint[panel_index], waypoints.GPS_P1_waypoint[panel_index+1], drone.drone_Yaw);
     x_target_P1_body = check_x_b;
@@ -772,13 +775,13 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
 
     //Evaluate control points to follow the GPS or estimated control line
     evaluate_control_point(from_image);
-
-    drone.drone_vel_msg.angular.z = pid_yaw->position_control_knowing_velocity(drone.yaw_des, abs(drone.drone_Yaw), 0, drone.drone_ang_vel_z); //ci andrebbe yaw
+    cout << "::::::::::::::::::Drone yaw desired : " << drone.yaw_des << endl;
+    drone.drone_vel_msg.angular.z = pid_yaw->position_control_knowing_velocity(abs(drone.yaw_des), abs(drone.drone_Yaw), 0, drone.drone_ang_vel_z); //ci andrebbe yaw
     if (drone.drone_Yaw < 0)
     {
         drone.drone_vel_msg.angular.z = -1 * drone.drone_vel_msg.angular.z;
     }
-
+cout << " :::::::::::::: z-velocity :" << drone.drone_vel_msg.angular.z << endl;
     // PID control on velocity defined on body frame
     // cout << "PID control based on target:" << drone.x_target << "," << drone.y_target << endl; 
     drone.drone_vel_msg.linear.x = pid_x->calculate(drone.x_target, drone.drone_x_b);
@@ -812,18 +815,23 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         from_image = false;
         cout << "from_image false since error GPS high" << endl;
     }
+
+    cout << "++++++++++++++ actual yaw of the drone: "<< drone.drone_Yaw << endl; 
     //Passaggio alla mission.state 2--> Cambio di vela
     if (mission.cartesian_distance_err < 1.5)
     {
       
         from_image = false;
         //ROtating Yaw of 180 degree
-            int index_or = panel_index/2;
+            /*int index_or = panel_index/2;
             if(index_or < 4){
              float variance = orientations[index_or+1] - orientations[index_or]; 
              cout << "******************var = "<< variance << " index"<< index_or<<endl;
              drone.yaw_des = drone.drone_Yaw - variance; //(mission.orientation - old_orientation); //ROtate drone 
             }
+            */
+        
+         drone.yaw_des = -M_PI/6; //30 gradi 
        
         mission.state = 2;                      //Cambio di array
         mission.count = mission.count + 1;
@@ -859,7 +867,7 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
     drone.drone_vel_msg.linear.y = pid_y->calculate(check_y_b, drone.drone_y_b);
 
     //if (mission.cartesian_distance_err < 0.2 && yaw_err < 0.1)
-    if (mission.cartesian_distance_err < 1.5 && yaw_err < 0.8)
+    if (mission.cartesian_distance_err < 0.5 && yaw_err < 0.1)
     {
         mission.count = mission.count + 1; //Aggiorno target e waypoints con cui aggiornare anche KF
         drone.image_control_count = 100;   // inizializazzione valore grosso. --> Serve per aggiornare il filtro per un certo numero di iterazioni anche se nin sono state ricevute nuove osservazioni-- > utilizzal'ultima osservazione ricevuta
@@ -935,8 +943,10 @@ int main(int argc, char **argv)
 
     //Obtain GPS error to define GPS waypoints for point P1 P2 of start and end
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
-    float x_waypoints [8] = {0, 12, 12.389, 22.39,1.40861 ,12.4082, 12.4274, 1.4278};
-    float y_waypoints [8] = {2, 2, 2, -4, -2.14783, -2.05184, -4.25175, -4.34774};
+    //float x_waypoints [8] = {0, 12, 12.389, 22.39,22.39 ,28.39, 12.4274, 1.4278};
+    //float y_waypoints [8] = {2, 2, 2, -4, -4, -10.41, -4.25175, -4.34774};
+    float x_waypoints [8] = {0, 6, 6.3, 11.50,11.80 ,28.39, 12.4274, 1.4278};
+    float y_waypoints [8] = {2, 2, 2.3, -1.3,-1.6 ,28.39, 12.4274, 1.4278};
     float n_strutture = 4.0;
 
     

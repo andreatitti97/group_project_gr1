@@ -488,7 +488,8 @@ void StructureImpl::init(float n_strutture, float* x_waypoints, float* y_waypoin
         cout<< "y center structure "<< i + 1 <<"frame : " << ycenter_structure_frame[i] << endl;
 
         //Trasformation from structure frame to world frame.. The center of structure 1 in world frame is located in main
-        transformation_structure_center_from_body_to_world(orientations[i/2]);
+       // transformation_structure_center_from_body_to_world(orientations[i/2]);
+       transformation_structure_center_from_body_to_world(0);
     }
     place_structure_start_end_point(n_strutture, x_waypoints, y_waypoints);
 
