@@ -823,15 +823,15 @@ cout << " :::::::::::::: z-velocity :" << drone.drone_vel_msg.angular.z << endl;
       
         from_image = false;
         //ROtating Yaw of 180 degree
-            /*int index_or = panel_index/2;
+            int index_or = panel_index/2;
             if(index_or < 4){
              float variance = orientations[index_or+1] - orientations[index_or]; 
              cout << "******************var = "<< variance << " index"<< index_or<<endl;
-             drone.yaw_des = drone.drone_Yaw - variance; //(mission.orientation - old_orientation); //ROtate drone 
+             drone.yaw_des = drone.drone_Yaw + variance; //(mission.orientation - old_orientation); //ROtate drone 
             }
-            */
+          
         
-         drone.yaw_des = -M_PI/6; //30 gradi 
+        //drone.yaw_des = -M_PI/6; //30 gradi 
        
         mission.state = 2;                      //Cambio di array
         mission.count = mission.count + 1;
@@ -945,8 +945,8 @@ int main(int argc, char **argv)
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
     //float x_waypoints [8] = {0, 12, 12.389, 22.39,22.39 ,28.39, 12.4274, 1.4278};
     //float y_waypoints [8] = {2, 2, 2, -4, -4, -10.41, -4.25175, -4.34774};
-    float x_waypoints [8] = {0, 6, 6.3, 11.50,11.80 ,28.39, 12.4274, 1.4278};
-    float y_waypoints [8] = {2, 2, 2.3, -1.3,-1.6 ,28.39, 12.4274, 1.4278};
+    float x_waypoints [8] = {0, 6, 6.3, 11.50,11.80 ,14.5, 12.4274, 1.4278};
+    float y_waypoints [8] = {2, 2, 2.3, -1.3,-1.6 ,-6.5, 12.4274, 1.4278};
     float n_strutture = 4.0;
 
     
