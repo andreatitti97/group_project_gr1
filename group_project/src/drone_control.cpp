@@ -8,6 +8,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
 #include <stdio.h>
+#include <sstream>
 #include <vector>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
@@ -15,12 +16,15 @@
 #include <fstream>
 #include <unistd.h>
 #include <eigen3/Eigen/Dense>
+//#include <filesystem>
+
 
 #include "group_project/pid.h"
 #include "group_project/Structure.h"
 #include "group_project/KF.h"
 
 using namespace std;
+//namespace fs = std::filesystem;
 #define N 2
 #define N_structure 4
 
@@ -895,8 +899,14 @@ void publish_estimated_line(float a_estimated, float c_estimated, float Dx, floa
 
 }
 
+
+
 int main(int argc, char **argv)
 {
+   
+
+   
+
     ros::init(argc, argv, "Solar_fligth_control_sim");
 
     ros::NodeHandle nh;
@@ -1086,6 +1096,7 @@ int main(int argc, char **argv)
     std::ofstream outFile20("simulation_data/sim_data_complete/y_target.txt");
     std::ofstream outFile21("simulation_data/sim_data_complete/a_obs.txt");
     std::ofstream outFile22("simulation_data/sim_data_complete/c_obs.txt");
+    
 
     //Da cancellare poi
     std::ofstream outFile23("simulation_data/sim_data_complete/KF_std_dev.txt");
@@ -1102,6 +1113,7 @@ int main(int argc, char **argv)
     std::ofstream outFile33("simulation_data/sim_data_complete/drone_z_pos.txt");
     std::ofstream outFile34("simulation_data/sim_data_complete/error_from_GPS_line.txt");
     std::ofstream outFile35("simulation_data/sim_data_complete/error_from_vision_line.txt");
+    std::ofstream outFile36("navigation_target.txt");
 
     mission.state = 0;
     //Counter
@@ -1174,6 +1186,15 @@ int main(int argc, char **argv)
             jump_structure_array(&structure, &pid_x, &pid_y, &pid_z, &pid_yaw);
             break;
         }
+
+        if (mission.state == 1){
+            if(!outFile36){
+                cout << "file not open" <<endl;
+            }
+            outFile36 << drone.x_target << " ; " << drone.y_target << endl;
+
+        }
+
 
         //Publish Estimated Line from KF to add to the elaborated images taken from camera
         publish_estimated_line(drone.xh_[0], drone.xh_[1], drone.x_target, drone.y_target);
@@ -1284,7 +1305,9 @@ Nel caso fosse necessario contattemi che vi spiego meglio.
         count_hovering = count_hovering + 1;
 
         ros::spinOnce();
+        
         r.sleep();
     }
+    outFile36.close();
     return 0;
 }
