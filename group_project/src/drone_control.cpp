@@ -139,6 +139,10 @@ struct Drone
     Eigen::Vector2f P1_B;
     Eigen::Vector2f P2_B;
 
+    //Test Control Point 
+    Eigen::Vector2f D_control;
+
+
     int image_control_count = 0;
     bool flagDroneOdom = false;
     bool flagDroneImu = false;
@@ -858,11 +862,16 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
     }
 }
 
-void publish_estimated_line(float a_estimated, float c_estimated)
+void publish_estimated_line(float a_estimated, float c_estimated, float Dx, float Dy)
 {
     //Find two points on Inertial frame lies to the estimated line
     Eigen::Vector2f P1(0.0, 0.0);
     Eigen::Vector2f P2(1.0, 0.0);
+
+    // Test Control Point
+    Eigen::Vector2f D_C(0.0,0.0);
+    D_C[0] = Dx;
+    D_C[1] = Dy;
 
     P1[1] = c_estimated; //y_P1 = a P1_x + c
     P2[1] = a_estimated * P2[0] + c_estimated;
@@ -871,6 +880,7 @@ void publish_estimated_line(float a_estimated, float c_estimated)
     Rotation_GF_to_BF_des_pos(P1[0], P1[1], drone.drone_Yaw);
     P1[0] = check_x_b;
     P1[1] = check_y_b;
+
     Rotation_GF_to_BF_des_pos(P2[0], P2[1], drone.drone_Yaw);
     P2[0] = check_x_b;
     P2[1] = check_y_b;
@@ -878,6 +888,11 @@ void publish_estimated_line(float a_estimated, float c_estimated)
     //Publish Point 1
     drone.P1_B = P1;
     drone.P2_B = P2;
+
+
+    //Test Control Point
+    drone.D_control = D_C;
+
 }
 
 int main(int argc, char **argv)
@@ -1028,6 +1043,11 @@ int main(int argc, char **argv)
     ros::Publisher vel = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
     ros::Publisher pub_P1_estimated = nh.advertise<geometry_msgs::Point>("/P1_estimated_control_point", 1);
     ros::Publisher pub_P2_estimated = nh.advertise<geometry_msgs::Point>("/P2_estimated_control_point", 1);
+    
+     // Test Control Point
+    ros::Publisher pub_Control_D = nh.advertise<geometry_msgs::Point>("/D_Control_point",1);
+
+    
     //Publish drone position to camera in order to create idealistic gimbal
     ros::ServiceClient client = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceClient client_RGB = nh.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
@@ -1156,7 +1176,7 @@ int main(int argc, char **argv)
         }
 
         //Publish Estimated Line from KF to add to the elaborated images taken from camera
-        publish_estimated_line(drone.xh_[0], drone.xh_[1]);
+        publish_estimated_line(drone.xh_[0], drone.xh_[1], drone.x_target, drone.y_target);
         geometry_msgs::Point point1;
         point1.x = drone.P1_B[0];
         point1.y = drone.P1_B[1];
@@ -1165,8 +1185,16 @@ int main(int argc, char **argv)
         point2.x = drone.P2_B[0];
         point2.y = drone.P2_B[1];
 
+        // Test Control Point 
+        geometry_msgs::Point point3;
+        point3.x = drone.D_control[0];
+        point3.y = drone.D_control[1];
+
         pub_P1_estimated.publish(point1);
         pub_P2_estimated.publish(point2);
+
+        // Test Control Point
+        pub_Control_D.publish(point3);
 
         // publish velocity message
         saturation(drone.drone_vel_msg.linear.x, drone.drone_vel_msg.linear.y, drone.drone_vel_msg.linear.x, drone.drone_vel_msg.angular.z);
