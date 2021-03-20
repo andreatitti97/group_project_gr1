@@ -22,7 +22,7 @@
 
 using namespace std;
 #define N 2
-#define N_structure 3
+#define N_structure 4
 
 
 
@@ -605,7 +605,7 @@ void start(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *pid_ya
     cout << "mission cartesian distance error: " << mission.cartesian_distance_err << endl;
 
     //Raggiunto Point P1 mi dirigo verso point P2
-    if (mission.cartesian_distance_err < 0.3)
+    if (mission.cartesian_distance_err < 0.5)
     {
         mission.flag_end_point = true; //Mi dirigo lungo il struttura verso punto P2 di end --> passo all'else sottostante
         mission.flag_create_setpoint = true;
@@ -803,6 +803,10 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
             if(index_or < 4){
              float variance = orientations[index_or+1] - orientations[index_or]; // difference between the orientation of two consecutive panels
              drone.yaw_des = drone.drone_Yaw + variance;  //Rotate drone 
+             /*if (drone.yaw_des >= 2*M_PI){
+                 //int temp = drone.yaw_des / 2*M_PI;
+                 drone.yaw_des = drone.yaw_des - 2*M_PI;
+             } */
             }
            
        
@@ -916,18 +920,21 @@ int main(int argc, char **argv)
     structure.pass_to_class_GPS_error(waypoints.gamma, waypoints.eta, waypoints.delta);
 
     // waypoints for block_testworld2
-    /*float x_waypoints [a_size] = {1.37, 12.36, 12.38, 1.38 ,1.40 ,12.40, 12.42, 1.42};
-    float y_waypoints [a_size] = {2.25, 2.34, 0.14, 0.05, -2.14, -2.05, -4.25, -4.34}; */
+    /*
+    float x_waypoints [a_size] = {1.37, 12.36, 12.38, 1.38 ,1.40 ,12.40, 12.42, 1.42};
+    float y_waypoints [a_size] = {2.25, 2.34, 0.14, 0.05, -2.14, -2.05, -4.25, -4.34};
+    */
 
-    // waypoints for curve_short
+    // waypoints for curve
     /*float x_waypoints [a_size] = {0, 12, 12.389, 22.39,22.39 ,28.39};
-    float y_waypoints [a_size] = {2, 2, 2, -4, -4, -10.41}; */
+    float y_waypoints [a_size] = {2, 2, 2.3, -4, -4.3, -10.41}; */
 
 
     // waypoints for curve3_short
+   
     float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
     float y_waypoints [a_size] = {2, 2, 2.3, -1.3,-1.6 ,-6.5};
-    
+   
     
     for (int i=0; i<a_size ; i+=2){
        float orientation = atan2(y_waypoints[i+1] - y_waypoints[i], x_waypoints[i+1] - x_waypoints[i]);//-M_PI; 
