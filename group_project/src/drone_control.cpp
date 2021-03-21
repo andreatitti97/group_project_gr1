@@ -26,7 +26,7 @@
 using namespace std;
 //namespace fs = std::filesystem;
 #define N 2
-#define N_structure 4
+#define N_structure 3
 
 
 
@@ -61,6 +61,11 @@ unsigned int panel_index = 0; // index of the current panel
 float orientations[N_structure]; //yaws of the panels
 int a_size = 2*N_structure ;
 
+float a_P[N_structure] = {0,-0.52, -1.4254};
+float c_P[N_structure] = {2.10791, 5.2530624, 15.59196414};
+
+std::ofstream outFile41("../observed_line.txt");
+std::ofstream outFile42("../estimated_line.txt");
 
 //Struttura relativa alla gestione dei punti di waypoints
 struct Waypoint_GPS
@@ -740,6 +745,22 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         drone.obs = Kalman_Filter.Obtain_Kalman_filter_observation();
         cout << "[KALMAN FILTER RGB] Observations : a  " << drone.obs[0] << " c: " << drone.obs[1] << endl;
         cout << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
+        
+        if( !outFile41){
+            cout <<"file not open"<<endl;
+        }
+        else {
+        outFile41 << "[KALMAN FILTER RGB] Observations : a  " << drone.obs[0] << " c: " << drone.obs[1] << endl;
+        }
+       
+        if( !outFile42){
+            cout <<"file not open"<<endl;
+        }
+        else {
+        outFile42 << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
+        }
+        
+        
         from_image = true;
         
         if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 1.5) //3
@@ -1115,6 +1136,23 @@ int main(int argc, char **argv)
     std::ofstream outFile35("simulation_data/sim_data_complete/error_from_vision_line.txt");
     std::ofstream outFile36("navigation_target.txt");
 
+    std::ofstream outFile37("../error_dist_line.txt");
+    std::ofstream outFile38("../drone_pos.txt");
+    std::ofstream outFile39("../des_vel.txt");
+    std::ofstream outFile40("../error_Panel_GPS.txt");
+
+
+    if(!outFile40){
+        cout << "File 40 not open! " << endl;
+    }
+    else {
+        for (int i=0; i<N_structure; i++){
+            float diff_a = a_P[i]- tan(orientations[i]);
+            float diff_c = c_P[i]- (y_waypoints[2*i]+y_waypoints[2*i + 1])/2 + tan(orientations[i])*(x_waypoints[2*i]+x_waypoints[2*i + 1])/2 ;
+            outFile40 <<" angular coeff error:  "<< diff_a << " intercept error: " << diff_c <<endl;
+        }
+    }
+
     mission.state = 0;
     //Counter
     int count = 0;
@@ -1187,11 +1225,25 @@ int main(int argc, char **argv)
             break;
         }
 
+
         if (mission.state == 1){
             if(!outFile36){
-                cout << "file not open" <<endl;
+                cout << "file 36 not open" <<endl;
+            }
+             if(!outFile37){
+                cout << "file 37 not open" <<endl;
+            }
+            if(!outFile38){
+                cout << "file 37 not open" <<endl;
+            }
+            if(!outFile39){
+                cout << "file 37 not open" <<endl;
             }
             outFile36 << drone.x_target << " ; " << drone.y_target << endl;
+            float err_distance = abs(a_P[panel_index] * drone.drone_x - drone.drone_y + c_P[panel_index])/ (sqrt(a_P[panel_index]*a_P[panel_index]+1));
+            outFile37 << err_distance << endl;
+            outFile38 << drone.drone_x<< " ; " <<drone.drone_y << " ; "<< drone.drone_z << endl;
+            outFile39 << drone.drone_vel_msg.linear.x  << " ; " <<drone.drone_vel_msg.linear.y  << " ; "<< drone.drone_vel_msg.angular.z  << endl;
 
         }
 

@@ -2,7 +2,7 @@
 <launch>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/block_testworld2.world"/>
+    <arg name="world_name" value="$(find cvg_sim_gazebo)/worlds/curve3_short_testworld.world"/>
   </include>
 
   <!-- Spawn simulated quadrotor uav  -->
