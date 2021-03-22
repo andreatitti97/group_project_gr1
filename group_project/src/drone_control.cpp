@@ -1142,8 +1142,8 @@ int main(int argc, char **argv)
     std::ofstream outFile33("simulation_data/sim_data_complete/drone_z_pos.txt");
     std::ofstream outFile34("simulation_data/sim_data_complete/error_from_GPS_line.txt");
     std::ofstream outFile35("simulation_data/sim_data_complete/error_from_vision_line.txt");
-    std::ofstream outFile36("navigation_target.txt");
-
+    // New log files 
+    std::ofstream outFile36("../navigation_target.txt");
     std::ofstream outFile37("../error_dist_line.txt");
     std::ofstream outFile38("../drone_pos.txt");
     std::ofstream outFile39("../des_vel.txt");
