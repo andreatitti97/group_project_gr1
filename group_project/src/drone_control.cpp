@@ -874,16 +874,24 @@ void jump_structure_array(Structure *structure, PID *pid_x, PID *pid_y, PID *pid
 
     if (mission.cartesian_distance_err < 0.5 && yaw_err < 0.1)
     {
+           
+        if ((panel_index +2 ) < N_structure * 2 ){
         mission.count = mission.count + 1; //Aggiorno target e waypoints con cui aggiornare anche KF
         drone.image_control_count = 100;   // inizializazzione valore grosso. --> Serve per aggiornare il filtro per un certo numero di iterazioni anche se nin sono state ricevute nuove osservazioni-- > utilizzal'ultima osservazione ricevuta
         mission.target_point = 2;
         mission.KF_Initialization = true;
         mission.structure_array_initialization = true; //necessaria per la corretta inizializazzione Kalman Filter
-        mission.state = 1;   
-        if ((panel_index +2 ) < 8 ){
-        panel_index = panel_index + 2;  
-       
-        }                       // Incomincia nuova navigazione vela
+        mission.state = 1;
+        panel_index = panel_index + 2;
+        
+        }
+        else{
+            // Test
+            cout << "--- Panel Finished Stay At Origin ---" << endl;
+            drone.drone_vel_msg.linear.x = pid_x->calculate(0.0, drone.drone_x_b);
+            drone.drone_vel_msg.linear.y = pid_y->calculate(0.0, drone.drone_y_b);
+            drone.drone_vel_msg.angular.z = pid_yaw->position_control_knowing_velocity(abs(drone.drone_Yaw), abs(drone.drone_Yaw), 0, drone.drone_ang_vel_z);
+        }                      // Incomincia nuova navigazione vela
     }
 }
 

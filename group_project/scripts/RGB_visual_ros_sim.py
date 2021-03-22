@@ -417,7 +417,7 @@ def image_pre_processing(image,line_versors_old,  drone_obj, counter_frame_analy
     #Devo camboare parametri trasformazione rispetto codice in image_analysis ---> capire perche cambia la trasformazione
    
    # mask for the white color
-    lower_blue = np.array([0,0,0])#sfumatura più scura  0 0 0 
+    lower_blue = np.array([0,0,225])#sfumatura più scura  0 0 0 
     upper_blue = np.array([0,0,255])#sfumatura più chiara 0 0 255
 
     # mask for the blue color

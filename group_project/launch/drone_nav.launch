@@ -7,5 +7,5 @@
         
 		<arg name="node_start_delay" default="20.0" />
 		<node name = "OpenCV" pkg="group_project" type="RGB_visual_ros_sim.py" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@'; gnome-terminal --command "/> 
- 
+		 
 </launch>
