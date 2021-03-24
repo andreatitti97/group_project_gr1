@@ -1,3 +1,4 @@
+
 <?xml version="1.0"?>
 <robot name="test_model">
  <property name="M_PI" value="3.1415926535897931" />
@@ -13,7 +14,7 @@
         <parent link="object_base_link"/>
         <child link="object_link"/>
         <axis xyz="0 0 1" />
-        <origin xyz="0 0 0" rpy="0 1.57 0"/>
+        <origin xyz="0 0 0" rpy="0 1.51 0"/>
     </joint>
  
    <link name="object_link">
@@ -23,7 +24,7 @@
        <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
      </inertial>
      <visual>
-       <origin xyz="0 0 0" rpy="0.00 0.0 0.0" />
+       <origin xyz="0 0 0" rpy="0.00 0.0 0.0" />  <!-- Scrivere 0 0 0 -- se si usa con dji sim -->
        <geometry>
          <box size="0.01 0.01 0.01" />
         </geometry>
@@ -49,7 +50,7 @@
     <sensor type="camera" name="bottom_camera">
       <update_rate>30.0</update_rate>
       <camera name="head">
-        <horizontal_fov>1.3962634</horizontal_fov>
+        <horizontal_fov>"${81*3.1415926535898/180}"</horizontal_fov>
         <image>
           <width>640</width>
           <height>360</height>
