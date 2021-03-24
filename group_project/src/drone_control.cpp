@@ -1037,7 +1037,7 @@ int main(int argc, char **argv)
        // waypoints for curve3BLUE5
    
     float x_waypoints [a_size] = {0, 6, 6.3, 9.5, 3.1 ,3.2, -3.5, 0.0};
-    float y_waypoints [a_size] = {2, 2, -1.0, 4.0, 10.0 ,4.0, 2.0, -1.0};
+    float y_waypoints [a_size] = {2, 2, -1.0, 4.0, 12.0 ,6.0, 4.0, 0.0};
    
     
     for (int i=0; i<a_size ; i+=2){
