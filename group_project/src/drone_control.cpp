@@ -62,12 +62,12 @@ float orientations[N_structure]; //yaws of the panels
 int a_size = 2*N_structure ;
 
 //coefficienti per curve3BLUE
-float a_P[N_structure] = {0.01051,-0.5868, -1.7454};
-float c_P[N_structure] = {2.0766, 5.8442, 19.865};
+/* float a_P[N_structure] = {0.01051,-0.5868, -1.7454};
+float c_P[N_structure] = {2.0766, 5.8442, 19.865}; */
 
 //coefficienti per curve3BLUE2
-//float a_P[N_structure] = {0.01051,0.5868,1.7454};
-//float c_P[N_structure] = {2.08,-1.4645,-14.7954};
+float a_P[N_structure] = {0.01051,0.5868,1.7454};
+float c_P[N_structure] = {2.08,-1.4645,-14.7954};
 
 //coefficienti per curve3BLUE3
 //float a_P[N_structure] = {0.010515 ,1.7454,-1.7078};
@@ -1015,14 +1015,14 @@ int main(int argc, char **argv)
 
 
     // waypoints for curve3_short
-   
+    /*
     float x_waypoints [a_size] = {0, 6, 6.3, 11.20, 11.50 ,14.5};
-    float y_waypoints [a_size] = {2, 2, 2.3, -1, -1.3 ,-6.2};
+    float y_waypoints [a_size] = {2, 2, 2.3, -1, -1.3 ,-6.2}; */
 
      // waypoints for curve3BLUE2
    
-    //float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
-    //float y_waypoints [a_size] = {2, 2, 2.3, 5.3, 5.6 ,10.20};
+    float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
+    float y_waypoints [a_size] = {2, 2, 2.3, 5.3, 5.6 ,10.20};
 
      // waypoints for curve3BLUE3
    
