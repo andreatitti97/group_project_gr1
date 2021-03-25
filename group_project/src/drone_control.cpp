@@ -26,7 +26,7 @@
 using namespace std;
 //namespace fs = std::filesystem;
 #define N 2
-#define N_structure 3
+#define N_structure 4
 
 
 
@@ -70,12 +70,13 @@ float c_P[N_structure] = {2.0766, 5.8442, 19.865}; */
 float c_P[N_structure] = {2.08,-1.4645,-14.7954}; */
 
 //coefficienti per curve3BLUE3
+/*
 float a_P[N_structure] = {0.010515 ,1.7454,-1.7078};
-float c_P[N_structure] = {2.08,-8.6802,23.62};
+float c_P[N_structure] = {2.08,-8.6802,23.62}; */
 
 //coefficienti per curve3BLUE4
-/*float a_P[N_structure] = {0.0093723,1.7514,-1.7086,0.0096153};
-float c_P[N_structure] = {2.08,-8.7211,23.6318,13.0899}; */
+float a_P[N_structure] = {0.0093723,1.7514,-1.7086,0.0096153};
+float c_P[N_structure] = {2.08,-8.7211,23.6318,13.0899}; 
 
 std::ofstream outFile41("../observed_line.txt");
 std::ofstream outFile42("../estimated_line.txt");
@@ -1025,14 +1026,14 @@ int main(int argc, char **argv)
     float y_waypoints [a_size] = {2, 2, 2.3, 5.3, 5.6 ,10.20}; */
 
      // waypoints for curve3BLUE3
-   
+   /*
     float x_waypoints [a_size] = {0, 6, 6.3, 9.3,9.6 ,6.0};
     float y_waypoints [a_size] = {2, 2, 2.3, 7.5, 7.8 ,12.20};
-
+*/
     // waypoints for curve3BLUE4
    
-    //float x_waypoints [a_size] = {0, 6, 6.3, 9.3,9.6 ,6.0, 6.3, 0.0};
-    //float y_waypoints [a_size] = {2, 2, 2.3, 7.5, 7.8 ,12.20, 12.5, 12.20};
+    float x_waypoints [a_size] = {0, 6, 6.3, 9.3,9.6 ,6.0, 6.3, 0.0};
+    float y_waypoints [a_size] = {2, 2, 2.3, 7.5, 7.8 ,12.20, 12.5, 12.20};
 
        // waypoints for curve3BLUE5 (serpentina)
     /*
