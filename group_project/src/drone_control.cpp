@@ -26,7 +26,7 @@
 using namespace std;
 //namespace fs = std::filesystem;
 #define N 2
-#define N_structure 4
+#define N_structure 3
 
 
 
@@ -62,20 +62,20 @@ float orientations[N_structure]; //yaws of the panels
 int a_size = 2*N_structure ;
 
 //coefficienti per curve3BLUE
-//float a_P[N_structure] = {0,-0.52, -1.4254};
-//float c_P[N_structure] = {2.10791, 5.2530624, 15.59196414};
+float a_P[N_structure] = {0.01051,-0.5868, -1.7454};
+float c_P[N_structure] = {2.0766, 5.8442, 19.865};
 
 //coefficienti per curve3BLUE2
-//float a_P[N_structure] = {0.01051,0.530655,1.05051};
+//float a_P[N_structure] = {0.01051,0.5868,1.7454};
 //float c_P[N_structure] = {2.08,-1.4645,-14.7954};
 
 //coefficienti per curve3BLUE3
-//float a_P[N_structure] = {0.010515,1.05052,2.10052};
+//float a_P[N_structure] = {0.010515 ,1.7454,-1.7078};
 //float c_P[N_structure] = {2.08,-8.6802,23.62};
 
 //coefficienti per curve3BLUE4
-float a_P[N_structure] = {0.01051,1.052,2.1003,0.009615};
-float c_P[N_structure] = {2.08,-8.7211,23.6318,13.0899};
+/*float a_P[N_structure] = {0.0093723,1.7514,-1.7086,0.0096153};
+float c_P[N_structure] = {2.08,-8.7211,23.6318,13.0899}; */
 
 std::ofstream outFile41("../observed_line.txt");
 std::ofstream outFile42("../estimated_line.txt");
@@ -765,14 +765,14 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
             cout <<"file not open"<<endl;
         }
         else {
-        outFile41 << "[KALMAN FILTER RGB] Observations : a  " << drone.obs[0] << " c: " << drone.obs[1] << endl;
+        outFile41 << drone.obs[0] << " " << drone.obs[1] << endl;
         }
        
         if( !outFile42){
             cout <<"file not open"<<endl;
         }
         else {
-        outFile42 << "[KALMAN FILTER RGB] Estimated states: a  " << drone.xh_[0] << " c: " << drone.xh_[1] << endl;
+        outFile42 << panel_index / 2  + 1 << " "<<drone.xh_[0] << " " << drone.xh_[1] << endl;
         }
         
         
@@ -1016,8 +1016,8 @@ int main(int argc, char **argv)
 
     // waypoints for curve3_short
    
-    //float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
-    //float y_waypoints [a_size] = {2, 2, 2.3, -1.3,-1.6 ,-6.5};
+    float x_waypoints [a_size] = {0, 6, 6.3, 11.20, 11.50 ,14.5};
+    float y_waypoints [a_size] = {2, 2, 2.3, -1, -1.3 ,-6.2};
 
      // waypoints for curve3BLUE2
    
@@ -1034,11 +1034,11 @@ int main(int argc, char **argv)
     //float x_waypoints [a_size] = {0, 6, 6.3, 9.3,9.6 ,6.0, 6.3, 0.0};
     //float y_waypoints [a_size] = {2, 2, 2.3, 7.5, 7.8 ,12.20, 12.5, 12.20};
 
-       // waypoints for curve3BLUE5
-   
+       // waypoints for curve3BLUE5 (serpentina)
+    /*
     float x_waypoints [a_size] = {0, 6, 6.3, 9.5, 3.1 ,3.2, -3.5, 0.0};
     float y_waypoints [a_size] = {2, 2, -1.0, 4.0, 12.0 ,6.0, 4.0, 0.0};
-   
+    */
     
     for (int i=0; i<a_size ; i+=2){
        float orientation = atan2(y_waypoints[i+1] - y_waypoints[i], x_waypoints[i+1] - x_waypoints[i]);//-M_PI; 
@@ -1299,7 +1299,7 @@ int main(int argc, char **argv)
                 cout << "file 37 not open" <<endl;
             }
             outFile36 << drone.x_target << " ; " << drone.y_target << endl;
-            float err_distance = abs(a_P[panel_index] * drone.drone_x - drone.drone_y + c_P[panel_index])/ (sqrt(a_P[panel_index]*a_P[panel_index]+1));
+            float err_distance = abs(a_P[panel_index/2] * drone.drone_x - drone.drone_y + c_P[panel_index/2])/ (sqrt(a_P[panel_index/2]*a_P[panel_index/2]+1));
             outFile37 << err_distance << endl;
             outFile38 << drone.drone_x<< " ; " <<drone.drone_y << " ; "<< drone.drone_z << endl;
             outFile39 << drone.drone_vel_msg.linear.x  << " ; " <<drone.drone_vel_msg.linear.y  << " ; "<< drone.drone_vel_msg.angular.z  << endl;
