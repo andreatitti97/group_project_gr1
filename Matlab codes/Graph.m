@@ -6,7 +6,7 @@ c_char=zeros(2,n_worlds);
 errors=zeros(2,n_worlds);
 % For each world
 for i=1:n_worlds
-    string="Folder"+i;
+    string="World"+i;
     temp=[];
     % for each trial
     for j=1:n_trials
