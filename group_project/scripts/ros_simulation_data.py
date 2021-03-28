@@ -13,7 +13,7 @@ from geometry_msgs.msg import Twist,PoseWithCovariance, Quaternion, Point, Pose,
 from std_msgs.msg import String, Header
 from std_msgs.msg import Empty 
 from nav_msgs.msg import Odometry
-from sensor_msgs.msg import Imu, Image
+from sensor_msgs.msg import Imu, Image, CompressedImage
 #from keras.layers.core import Dense, Dropout, Activation, Flatten
 import matplotlib.pyplot as plt
 import numpy as np
@@ -60,7 +60,7 @@ def takeEnvObservations(): #Function which takes information from the environmen
     
         # return poseData, imuData, velData, altitudeVelDrone
         return poseData
-
+'''
 def take_drone_camera_frame():
     camera_frame = None
     while camera_frame is None :
@@ -84,6 +84,20 @@ def take_drone_camera_RGB_frame():
              rospy.loginfo('Unable to reach the drone camera topic. Try to connect again')
         bridge = CvBridge()
         cv_image = bridge.imgmsg_to_cv2(camera_frame, desired_encoding='bgr8')
+        #cv2.imshow('RGBframe', cv_image)
+        #cv2.waitKey(2)
+
+    return cv_image '''
+
+def take_drone_camera_RGB_frame():
+    camera_frame = None
+    while camera_frame is None :
+        try:
+                camera_frame = rospy.wait_for_message('/output/image_raw/compressed', CompressedImage, timeout = 7)
+        except:
+                rospy.loginfo('Unable to reach the drone camera topic. Try to connect again')
+        bridge = CvBridge()
+        cv_image = bridge.compressed_imgmsg_to_cv2(camera_frame, desired_encoding='bgr8')
         #cv2.imshow('RGBframe', cv_image)
         #cv2.waitKey(2)
 

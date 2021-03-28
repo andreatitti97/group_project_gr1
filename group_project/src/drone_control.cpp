@@ -66,12 +66,12 @@ int a_size = 2*N_structure ;
 float c_P[N_structure] = {2.0766, 5.8442, 19.865}; */
 
 //coefficienti per curve3BLUE2
-/* float a_P[N_structure] = {0.01051,0.5868,1.7454};
-float c_P[N_structure] = {2.08,-1.4645,-14.7954}; */
+float a_P[N_structure] = {0.01051,0.5868,1.7454};
+float c_P[N_structure] = {2.08,-1.4645,-14.7954};
 
 //coefficienti per curve3BLUE3
-float a_P[N_structure] = {0.010515 ,1.7454,-1.7078};
-float c_P[N_structure] = {2.08,-8.6802,23.62};
+//float a_P[N_structure] = {0.010515 ,1.7454,-1.7078};
+//float c_P[N_structure] = {2.08,-8.6802,23.62};
 
 //coefficienti per curve3BLUE4
 /*float a_P[N_structure] = {0.0093723,1.7514,-1.7086,0.0096153};
@@ -432,7 +432,7 @@ void evaluate_control_point(bool from_image)
     //Define vector Vx starting from body frame origin and parallel to the line r
     double Vx[2] = {1 / a, -1 / b};
 
-    double Kx = 0.3; //Coefficiente moltiplicativo del vettore parallelo alla retta r
+    double Kx = 0.6; //Coefficiente moltiplicativo del vettore parallelo alla retta r
     double Vx_norm[2] = {Kx * ((1 / (sqrt(pow(Vx[0], 2) + pow(Vx[1], 2)))) * Vx[0]), Kx * ((1 / (sqrt(pow(Vx[0], 2) + pow(Vx[1], 2)))) * Vx[1])};
 
     //cout<<"target_point: "<< target_point<<endl;
@@ -778,7 +778,7 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         
         from_image = true;
         
-        if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 1.5) //3
+        if (drone.flagDroneRGBControlPoint1 == true && drone.flagDroneRGBControlPoint2 == true && waypoints.error_from_GPS_line < 3) //3
         {
             //Resetto counter
             cout << "image control timer reset " << endl;
@@ -804,18 +804,19 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
     }
     // PID control on velocity defined on body frame
     // cout << "PID control based on target:" << drone.x_target << "," << drone.y_target << endl; 
-    drone.drone_vel_msg.linear.x = pid_x->position_control_knowing_velocity(drone.x_target, drone.drone_x_b, 0,  drone.drone_lin_vel_x);
-    drone.drone_vel_msg.linear.y = pid_y->position_control_knowing_velocity(drone.y_target, drone.drone_y_b, 0,  drone.drone_lin_vel_y);
+    drone.drone_vel_msg.linear.x = 0.3*(pid_x->position_control_knowing_velocity(drone.x_target, drone.drone_x_b, 0,  drone.drone_lin_vel_x));
+    drone.drone_vel_msg.linear.y = 0.3*(pid_y->position_control_knowing_velocity(drone.y_target, drone.drone_y_b, 0,  drone.drone_lin_vel_y));
     
-    // drone.drone_vel_msg.linear.x = 0.0;
-    // drone.drone_vel_msg.linear.y = 0.0;
+
+    //drone.drone_vel_msg.linear.x = 0.0;
+    //drone.drone_vel_msg.linear.y = 0.0;
 
     //Considero step
 
     //Permette a tutte le osservaziinidel filtri di essere inizializzate correttamente
     //finche non diventa false il flag il drone è guidato via Waypoint lungo la vela
 /* -------------------------------------------------------------------------------------------------------------- */
-    if (mission.navigation_iteration_count < 300) //cambiamento
+    if (mission.navigation_iteration_count < 100000) //cambiamento 300 (old)
     {
         //Attende che il filtro si inizializzi. Magari si puo rendere piu preciso facendolo fermare quando rileva qualcisa du concreto
         mission.structure_array_initialization = false;
@@ -869,6 +870,9 @@ void navigation(Structure *structure, PID *pid_x, PID *pid_y, PID *pid_z, PID *p
         mission.count = mission.count + 1;
         cout << "From Navigation mission.count incremented :" << mission.count << endl;
     }
+    
+    cout << "----linear x: " << drone.drone_vel_msg.linear.x << endl;
+    cout << "----linear y: " << drone.drone_vel_msg.linear.y << endl;
 }
 
 
@@ -1021,13 +1025,13 @@ int main(int argc, char **argv)
 
      // waypoints for curve3BLUE2
    
-    /* float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
-    float y_waypoints [a_size] = {2, 2, 2.3, 5.3, 5.6 ,10.20}; */
+    float x_waypoints [a_size] = {0, 6, 6.3, 11.50,11.80 ,14.5};
+    float y_waypoints [a_size] = {2, 2, 2.3, 5.3, 5.6 ,10.20};
 
      // waypoints for curve3BLUE3
    
-    float x_waypoints [a_size] = {0, 6, 6.3, 9.3,9.6 ,6.0};
-    float y_waypoints [a_size] = {2, 2, 2.3, 7.5, 7.8 ,12.20};
+    //float x_waypoints [a_size] = {0, 6, 6.3, 9.3,9.6 ,6.0};
+    //float y_waypoints [a_size] = {2, 2, 2.3, 7.5, 7.8 ,12.20};
 
     // waypoints for curve3BLUE4
    
@@ -1134,7 +1138,7 @@ int main(int argc, char **argv)
     ros::Publisher pub_P2_estimated = nh.advertise<geometry_msgs::Point>("/P2_estimated_control_point", 1);
     
      // Test Control Point
-    ros::Publisher pub_Control_D = nh.advertise<geometry_msgs::Point>("/D_Control_point",1);
+    ros::Publisher pub_Control_D = nh.advertise<geometry_msgs::Point>("/D_Control_point",1); //TOPIC CONTROL POINTS
 
     
     //Publish drone position to camera in order to create idealistic gimbal
