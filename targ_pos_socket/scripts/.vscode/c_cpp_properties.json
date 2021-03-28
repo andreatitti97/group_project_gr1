@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/roberto/catkin_ws/devel/include/**",
+        "/opt/ros/kinetic/include/**",
+        "/home/roberto/Documents/Unige/Year_2/Experimental-Robotics-Laboratory/experimental_ws/src/assignment_1/include/**",
+        "/opt/ros/kinetic/share/gazebo_ros/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}
