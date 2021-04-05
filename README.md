@@ -15,10 +15,29 @@ sudo apt-get install ros-kinetic-hector-*
 ```
 
 ## Launching commands
+TUORIAL FOR LAUNCH THE PROJECT WITH THE REAL DRONE.
+NB: check the ros topics in the file ros_simulation_data for using the project with the drone or in simulation
 
+
+Lancia il mondo e il drone in simulazione (Gazebo)
 ```
 $ roslaunch cvg_sim_gazebo mytest.launch
  
 ```
-In primo momento in una nuova shell viene lanciato il nodo relativo al controllo del drone, successivamente (dopo 40 secondi) una nuova shell viene lancciata col nodo relativo all'algoritmo di OpenCV.
-  
+Start the socket for receive images from the drone
+```
+$ rosrun drone_publish_image socketServerros2.py
+
+```
+Start the CV algorithm
+
+```
+$ rosrun group_project RGB_visual_ros_sim.py
+
+```
+Start the communication with the drone, check safety of the drone and of people in the environment befor this step
+
+```
+$ rosrun targ_pos_socket send_target_socket.py
+
+```
