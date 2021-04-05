@@ -75,6 +75,7 @@ def take_drone_camera_frame():
     return cv_image
 
 
+######### UNCOMMENT THIS LINE FOR CONTROL THE DRONE IN SIMULATION #############################################
 def take_drone_camera_RGB_frame():
     camera_frame = None
     while camera_frame is None :
@@ -89,6 +90,7 @@ def take_drone_camera_RGB_frame():
 
     return cv_image '''
 
+# Receive the image from the real drone
 def take_drone_camera_RGB_frame():
     camera_frame = None
     while camera_frame is None :
