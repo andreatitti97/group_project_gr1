@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <node name="img_listener" pkg="drone_publish_image" type="socketServerros2.py" output="screen" />
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find drone_publish_image)/config/ros_conf.rviz" />  -->
+    <node name="republish" type="republish" pkg="image_transport" output="screen" args="compressed in:=/output/image_raw/ raw out:=/gimbal_bottom_camera/image_raw" />
+    <node name="image_view" pkg="image_view" type="image_view" args=" image:=/gimbal_bottom_camera/image_raw" />
+
+</launch>
